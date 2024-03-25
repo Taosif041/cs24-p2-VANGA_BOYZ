@@ -1,0 +1,33 @@
+/* landing-page.component.css */
+.content {
+  text-align: center;
+}
+
+.dhaka-image {
+  width: 30%;
+  height: 400px;
+  object-fit: cover;
+  padding: 10px;
+  border-radius: 10%;
+}
+
+.our-mission {
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin-top: 20px;
+  width: 60%;
+  margin-left: 20vw;
+}
+
+body {
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.head1 {
+  margin-bottom: 20px;
+  padding: 10px;
+}
+.head2 {
+  margin-top: 20px;
+}
