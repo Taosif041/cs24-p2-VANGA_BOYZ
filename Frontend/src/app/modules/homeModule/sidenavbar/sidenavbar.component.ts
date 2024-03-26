@@ -1,63 +1,49 @@
-import { Component, Input, computed, signal, OnInit } from '@angular/core';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
-
+import {
+  Component,
+  Input,
+  computed,
+  signal,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { RouterModule } from '@angular/router';
+import { Sidebar, SidebarModule } from 'primeng/sidebar';
 
 export type MenuItems = {
   icon: string;
   label: string;
   route: string;
-}
-
+};
 
 @Component({
   selector: 'app-sidenavbar',
-  standalone: true,
-  imports: [MatListModule, MatSidenavModule],
   templateUrl: './sidenavbar.component.html',
-  styleUrl: './sidenavbar.component.scss'
+  styleUrl: './sidenavbar.component.scss',
+  standalone: true,
+  imports: [
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    RouterModule,
+    SidebarModule,
+  ],
 })
-export class SidenavbarComponent implements OnInit {
-  // public authService: AuthenticationService
-  constructor() {}
-  ngOnInit() {
-    // this.checkAuthentication();
+export class SidenavbarComponent {
+  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+
+  menuItems: MenuItems[] = [
+    { icon: 'home', label: 'Home', route: '/' },
+    { icon: 'info', label: 'About', route: '/about' },
+    { icon: 'contact_page', label: 'Contact', route: '/contact' },
+    // Add more items as needed
+  ];
+
+  closeCallback(e: any): void {
+    this.sidebarRef.close(e);
   }
 
-
-  
-
-  sideNavCollapsed = signal(false);
-  @Input() set collapsed(val: boolean){
-    this.sideNavCollapsed.set(val);
-  }
-  menuItemsUsers = signal<MenuItems[]>([
-    { icon: 'analytics', label:'Leaderboard', route:'leaderboard' },
-    { icon: 'dashboard', label:'Contests', route:'contests' },
-    { icon: 'campaign', label:'Announcements', route:'announcements' },
-    { icon: 'verified_user', label:'LogIn as Admin', route:'sign-in' }
-  ]);
-
-  menuItemsAdmins = signal<MenuItems[]>([
-    { icon: 'analytics', label:'Leaderboard', route:'leaderboard' },
-    { icon: 'dashboard', label:'Contests', route:'contests' },
-    { icon: 'campaign', label:'Announcements', route:'announcements' },
-    // { icon: 'verified_user', label:'LogIn as Admin', route:'sign-in' },
-    { icon: 'admin_panel_settings', label:'Admin Dashboard', route:'admin-dash-board' },
-    { icon: 'logout', label:'Log Out', route:'log-out' }
-  ]);
-
-
-  profilePicSize = computed(()=>this.sideNavCollapsed()?'32':'100');
-
-  // token:any;
-  // checkAuthentication() {
-  //   if (this.authService.isAuthenticated()) {
-  //     this.token='admin';
-  //   } else {
-  //     this.token='user';
-  //   }
-  // }
-
-
+  sidebarVisible: boolean = false;
 }

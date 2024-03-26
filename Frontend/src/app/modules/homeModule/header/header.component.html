@@ -1,9 +1,32 @@
-<mat-toolbar color="primary" class="mat-elevation-z3">
-  <button mat-icon-button (click)="collapsed = !collapsed">
-    EcoSync
-    <mat-icon>menu</mat-icon>
-  </button>
+<body>
+  <mat-nav-list>
+    <!-- Render menu items based on the token value -->
+    <ng-container>
+      <a
+        mat-list-item
+        *ngFor="let item of menuItemsAdmins()"
+        [routerLink]="item.route"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    </ng-container>
 
-  <img src="../../../../assets/dncc-logo.png" alt="Logo" class="logo" />
-  <button class="login-button">Login</button>
-</mat-toolbar>
+    <ng-container>
+      <a
+        mat-list-item
+        *ngFor="let item of menuItemsUsers()"
+        [routerLink]="item.route"
+        routerLinkActive
+        #rla="routerLinkActive"
+        [activated]="rla.isActive"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label }}</span>
+      </a>
+    </ng-container>
+  </mat-nav-list>
+</body>
