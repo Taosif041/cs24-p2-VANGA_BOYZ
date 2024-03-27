@@ -1,0 +1,69 @@
+<div class="main-body">
+  <button mat-raised-button color="primary" (click)="openDilogForm()">
+    Create New Sts
+  </button>
+  <br />
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Ex. Mia"
+      #input
+    />
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- ID Column -->
+      <ng-container matColumnDef="wardNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Ward Number</th>
+        <td mat-cell *matCellDef="let row">{{ row.wardNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="capacity">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Capacity</th>
+        <td mat-cell *matCellDef="let row">{{ row.capacity }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gpsLat">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>GPS Lat.</th>
+        <td mat-cell *matCellDef="let row">{{ row.gpsLat }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gpsLong">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>GPS Long.</th>
+        <td mat-cell *matCellDef="let row">{{ row.gpsLong }}</td>
+      </ng-container>
+
+      <!-- Fruit Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="openEditForm(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSts(row.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of Sts
+      s"
+    ></mat-paginator>
+  </div>
+</div>

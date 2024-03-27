@@ -1,0 +1,36 @@
+<div class="container">
+  <div mat-dialog-title>
+    <h1>{{ data ? "Update sts" : "Create New sts" }}</h1>
+  </div>
+
+  <form [formGroup]="stsForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+      <mat-form-field appearance="outline">
+        <mat-label>Ward Number</mat-label>
+        <input matInput formControlName="wardNumber" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacity (Tonnes)</mat-label>
+        <input matInput formControlName="capacity" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>GPS Latitude</mat-label>
+        <input matInput formControlName="gpsLat" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>GPS Longitude</mat-label>
+        <input matInput formControlName="gpsLong" />
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions class="actions">
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ data ? "Update" : "Save" }}
+      </button>
+    </div>
+  </form>
+</div>

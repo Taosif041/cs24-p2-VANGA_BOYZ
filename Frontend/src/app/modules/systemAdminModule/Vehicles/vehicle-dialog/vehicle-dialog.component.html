@@ -1,0 +1,75 @@
+<div class="container">
+  <div mat-dialog-title>
+    <h1>{{ data ? "Update Vehicle" : "Create New Vehicle" }}</h1>
+  </div>
+
+  <form [formGroup]="vehicleForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Vehicle Registration Number</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="registrationNumber"
+            required
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option value="Open Truck">Open Truck</mat-option>
+            <mat-option value="Dump Truck">Dump Truck</mat-option>
+            <mat-option value="Compactor">Compactor</mat-option>
+            <mat-option value="Container Carrier">Container Carrier</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Capacity</mat-label>
+          <mat-select formControlName="capacity" required>
+            <mat-option value="3 ton">3 ton</mat-option>
+            <mat-option value="5 ton">5 ton</mat-option>
+            <mat-option value="7 ton">7 ton</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Fuel Cost per Kilometer (Fully Loaded)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="fuelCostFullyLoaded"
+            required
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <mat-form-field appearance="outline">
+          <mat-label>Fuel Cost per Kilometer (Unloaded)</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="fuelCostUnloaded"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div mat-dialog-actions class="actions">
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ data ? "Update" : "Save" }}
+      </button>
+    </div>
+  </form>
+</div>
