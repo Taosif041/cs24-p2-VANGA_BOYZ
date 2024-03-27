@@ -1,5 +1,3 @@
-// src/app.js
-
 require('dotenv').config();
 
 const express = require('express');
@@ -14,8 +12,10 @@ const app = express();
 connectDB();
 
 app.use(express.json());
-app.use(authMiddleware);
 app.use('/auth', authRoutes);
+
+// Use authMiddleware before userRoutes
+app.use(authMiddleware);
 app.use('/user', userRoutes); // Use userRoutes
 
 // Middleware for handling undefined routes
