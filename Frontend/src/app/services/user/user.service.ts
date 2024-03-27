@@ -17,4 +17,7 @@ export class UserService {
   addUser(data: any): Observable<any> {
     return this._http.post(this.url, data);
   }
+  deleteUser(id: string): Observable<any> {
+    return this._http.delete(`http://localhost:3000/user/${id}`);
+  }
 }
