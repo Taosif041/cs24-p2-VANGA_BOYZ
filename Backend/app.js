@@ -1,15 +1,27 @@
 // src/app.js
 
+require('dotenv').config();
+
 const express = require('express');
 const authRoutes = require('./routes/authRoutes');
-const connectDB = require('./config/db'); // updated this line
+const userRoutes = require('./routes/userRoutes'); // Import userRoutes
+const connectDB = require('./config/db');
+const authMiddleware = require('./middlewares/authMiddleware');
+
 const app = express();
 
 // Connect to MongoDB
 connectDB();
 
-app.use(express.json()); // for parsing application/json
+app.use(express.json());
+app.use(authMiddleware);
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes); // Use userRoutes
 
-const port = 3000;
+// Middleware for handling undefined routes
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not defined' });
+});
+
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running at http://localhost:${port}`));
