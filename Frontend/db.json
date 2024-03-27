@@ -28,40 +28,58 @@
   },
   "user": [
     {
-      "id": "927a",
-      "name": "Hamim",
-      "email": "mdtaosifulislam@gmail.com",
-      "password": "123456"
-    },
-    {
-      "id": "faf5",
-      "name": "heelo",
-      "email": "damovic517@glaslack.com",
-      "password": "123456"
-    },
-    {
-      "id": "fb9c",
-      "name": "who",
-      "email": "damovic17@glaslack.com",
-      "password": "deleteUser"
-    },
-    {
-      "id": "2dc1",
-      "name": "s",
-      "email": "s",
+      "id": "a082",
+      "name": "d",
+      "email": "d",
       "password": "s"
     },
     {
-      "id": "4262",
-      "name": "HamimRk",
-      "email": "mdtaosifulislam@gmail.com",
-      "password": "123456"
+      "name": "admin",
+      "email": "admin",
+      "password": "admin",
+      "id": "e2a2"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "2930",
+      "registrationNumber": "aa-rr-rrt-tt",
+      "type": "Container Carrier",
+      "capacity": "3 ton",
+      "fuelCostFullyLoaded": 33,
+      "fuelCostUnloaded": 33
     },
     {
-      "id": "a9e3",
-      "name": "Hamim",
-      "email": "mdtaosifulislam@gmail.com",
-      "password": "123456"
+      "id": "",
+      "registrationNumber": "hhd",
+      "type": "Open Truck",
+      "capacity": "3 ton",
+      "fuelCostFullyLoaded": 2233,
+      "fuelCostUnloaded": 33
+    },
+    {
+      "id": "",
+      "registrationNumber": "s",
+      "type": "Open Truck",
+      "capacity": "3 ton",
+      "fuelCostFullyLoaded": 44,
+      "fuelCostUnloaded": 44
+    }
+  ],
+  "sts": [
+    {
+      "id": "",
+      "wardNumber": "4",
+      "capacity": "33",
+      "gpsLat": "33",
+      "gpsLong": "4"
+    },
+    {
+      "id": "",
+      "wardNumber": "ss",
+      "capacity": "33",
+      "gpsLat": "33",
+      "gpsLong": "3"
     }
   ]
 }

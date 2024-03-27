@@ -1,7 +1,7 @@
-import { DialogRef } from '@angular/cdk/dialog';
+import { VehicleService } from './../../../../services/vehicle/vehicle.service';
+import { VehicleDialogComponent } from './../vehicle-dialog/vehicle-dialog.component';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogueComponent } from '../../../utility/dialogue/dialogue.component';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -9,14 +9,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
 
-import { UserService } from '../../../services/user/user.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  selector: 'app-create-new-user',
+  selector: 'app-vehicles',
   standalone: true,
   imports: [
-    DialogueComponent,
+    VehicleDialogComponent,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -25,12 +27,21 @@ import { UserService } from '../../../services/user/user.service';
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
+    MatListModule,
+    MatMenuModule,
   ],
-  templateUrl: './create-new-user.component.html',
-  styleUrl: './create-new-user.component.scss',
+  templateUrl: './vehicles.component.html',
+  styleUrl: './vehicles.component.scss',
 })
-export class CreateNewUserComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'email', 'action'];
+export class VehiclesComponent implements OnInit {
+  displayedColumns: string[] = [
+    'registrationNumber',
+    'type',
+    'capacity',
+    'fuelCostFullyLoaded',
+    'fuelCostUnloaded',
+    'action',
+  ];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -38,25 +49,27 @@ export class CreateNewUserComponent implements OnInit {
 
   constructor(
     private _dialogue: MatDialog,
-    private _userService: UserService
+    private _vehicleService: VehicleService,
+    private _snackbar: SnackbarService,
+    public dialog: MatDialog
   ) {}
   ngOnInit(): void {
-    this.getUserList();
+    this.getVehiclesList();
   }
 
   openDilogForm() {
-    const DialogRef = this._dialogue.open(DialogueComponent);
+    const DialogRef = this._dialogue.open(VehicleDialogComponent);
     DialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
-          this.getUserList();
+          this.getVehiclesList();
         }
       },
       error: console.log,
     });
   }
-  getUserList() {
-    this._userService.getUserList().subscribe({
+  getVehiclesList() {
+    this._vehicleService.getVehiclesList().subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
@@ -76,18 +89,26 @@ export class CreateNewUserComponent implements OnInit {
     }
   }
 
-  deleteUser(id: string) {
-    this._userService.deleteUser(id).subscribe({
+  deleteVehicles(id: string) {
+    this._vehicleService.deleteVehicles(id).subscribe({
       next: (res) => {
-        alert('User deleted successfully');
-        this.getUserList();
+        this._snackbar.openSnackBar('Vehicle deleted successfully', 'done');
+        this.getVehiclesList();
       },
       error: console.log,
     });
   }
   openEditForm(data: any) {
-    this._dialogue.open(DialogueComponent, {
+    const DialogRef = this._dialogue.open(VehicleDialogComponent, {
       data,
+    });
+    DialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getVehiclesList();
+        }
+      },
+      error: console.log,
     });
   }
 }

@@ -19,7 +19,8 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { UserService } from '../../services/user/user.service';
+import { UserService } from '../../../../services/user/user.service';
+import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-dialogue',
@@ -41,7 +42,8 @@ export class DialogueComponent implements OnInit {
     private _fb: FormBuilder,
     private _userService: UserService,
     private _dialogRef: MatDialogRef<DialogueComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private _snackbar: SnackbarService
   ) {
     this.userForm = this._fb.group({
       name: '',
@@ -55,19 +57,21 @@ export class DialogueComponent implements OnInit {
   onFormSubmit() {
     if (this.userForm.valid) {
       if (this.data) {
-        this._userService.addUser(this.userForm.value).subscribe({
-          next: (val: any) => {
-            alert('User Updated successfully');
-            this._dialogRef.close(true);
-          },
-          error: (err) => {
-            console.log(err);
-          },
-        });
+        this._userService
+          .updateUser(this.data.id, this.userForm.value)
+          .subscribe({
+            next: (val: any) => {
+              this._snackbar.openSnackBar('User Updated successfully', 'done');
+              this._dialogRef.close(true);
+            },
+            error: (err) => {
+              console.log(err);
+            },
+          });
       } else {
         this._userService.addUser(this.userForm.value).subscribe({
           next: (val: any) => {
-            alert('User addded successfully');
+            this._snackbar.openSnackBar('User added successfully', 'done');
             this._dialogRef.close(true);
           },
           error: (err) => {
