@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const RoleSchema = require('./role').schema;
 
 const UserSchema = new mongoose.Schema({
   email: {
