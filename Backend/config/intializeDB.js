@@ -5,6 +5,10 @@ const connectDB = require('./db');
 async function initializeDB() {
   try {
     connectDB();
+    await Promise.all([
+      Role.deleteMany({}),
+      Permission.deleteMany({})
+    ]);
 
     const permissions = [
       'Add/Remove Users',
@@ -15,7 +19,8 @@ async function initializeDB() {
       'Add/Remove STS and Landfills',
       'Add/Remove Vehicles',
       'Manage Oil Consumption Data',
-      'Log vehicle arrivals and departures including mileage'
+      'Log vehicle arrivals and departures including mileage',
+      
     ];
 
     const createdPermissions = await Promise.all(

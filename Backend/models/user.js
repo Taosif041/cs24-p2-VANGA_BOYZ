@@ -19,7 +19,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
   
   },
-  roles: [RoleSchema],
+  roles: {
+    type: [RoleSchema],
+    default: undefined
+  },
   
   dateOfBirth: {
     type: Date,

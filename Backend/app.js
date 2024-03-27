@@ -14,9 +14,9 @@ connectDB();
 app.use(express.json());
 app.use('/auth', authRoutes);
 
-// Use authMiddleware before userRoutes
-app.use(authMiddleware);
 app.use('/user', userRoutes); // Use userRoutes
+// Use authMiddleware before userRoutes
+//app.use(authMiddleware);
 
 // Middleware for handling undefined routes
 app.use((req, res) => {

@@ -2,6 +2,7 @@ const User = require("../models/user");
 const Role = require("../models/role");
 const RolesArrayValidator = require("../validators/rolesArray");
 const userValidator = require("../validators/user");
+const createUserValidator = require("../validators/createUser");
 require("dotenv").config({ path: "../.env" });
 const bcrypt = require("bcrypt");
 exports.listAllUsers = async (req, res) => {
@@ -18,6 +19,7 @@ exports.listAllUsers = async (req, res) => {
 
 exports.getUserDetails = async (req, res) => {
   try {
+    console.log("getUserDetails");
     const user = await User.findById(req.params.userId).select("-password");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -33,7 +35,7 @@ exports.getUserDetails = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { error } = userValidator.validate(req.body);
+    const { error } = createUserValidator.validate(req.body);
     if (error) {
       return res
         .status(400)
@@ -58,10 +60,16 @@ exports.createUser = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
     req.body.password = hashedPassword;
-
+    
     const newUser = new User(req.body);
+   
+  
     await newUser.save();
-    res.status(201).json(newUser);
+    // Delete the password field before sending the user details
+    const newUser1 = { ...newUser._doc };
+    delete newUser1.password;
+
+    res.status(201).json(newUser1);
   } catch (error) {
     res
       .status(500)
@@ -81,12 +89,10 @@ exports.updateUserDetails = async (req, res) => {
       });
     }
 
-    const update = { ...req.body };
-    delete update.password;
-
+    
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
-      update,
+      req.body,
       { new: true }
     );
     if (!updatedUser) {
@@ -103,7 +109,7 @@ exports.updateUserDetails = async (req, res) => {
 };
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndRemove(req.params.userId);
+    const user = await User.findByIdAndDelete(req.params.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -119,6 +125,7 @@ exports.deleteUser = async (req, res) => {
 };
 exports.listAllRoles = async (req, res) => {
   try {
+    console.log("listAllRoles");  
     const roles = await Role.find({});
     res.status(200).json(roles);
   } catch (error) {
@@ -132,7 +139,7 @@ exports.listAllRoles = async (req, res) => {
 };
 exports.updateUserRoles = async (req, res) => {
   try {
-    const { error } = RolesArrayValidator.validate(req.body.roles);
+    const { error } = RolesArrayValidator.validate(req.body);
     if (error) {
       return res.status(400).json({
         message: "Validation failed",
@@ -140,10 +147,9 @@ exports.updateUserRoles = async (req, res) => {
       });
     }
 
-    const rolesCount = await Role.countDocuments({
-      _id: { $in: req.body.roles.map((role) => role._id) },
-    });
-    if (rolesCount !== req.body.roles.length) {
+    const roleNames = req.body;
+    const roles = await Role.find({ name: { $in: roleNames } });
+    if (roles.length !== roleNames.length) {
       return res.status(400).json({ message: "One or more roles are invalid" });
     }
 
@@ -152,8 +158,10 @@ exports.updateUserRoles = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.roles = req.body.roles;
+    user.roles = roles;
     await user.save();
+    // Delete the password field before sending the user details
+    delete user.password;
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({

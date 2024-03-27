@@ -8,6 +8,10 @@ require('dotenv').config({path: '../.env'});
 async function createAdmin() {
   try {
     await connectDB();
+    await Promise.all([
+      User.deleteMany({})
+      
+    ]);
 
     // Find the System Admin role
     const systemAdminRole = await Role.findOne({ roleName: 'System Admin' });

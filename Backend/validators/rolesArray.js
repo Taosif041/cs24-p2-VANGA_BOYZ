@@ -1,6 +1,5 @@
 const Joi = require('joi');
-const RoleValidator = require('./role');
 
-const RolesArrayValidator = Joi.array().items(RoleValidator);
+const RolesArrayValidator = Joi.array().items(Joi.string());
 
 module.exports = RolesArrayValidator;

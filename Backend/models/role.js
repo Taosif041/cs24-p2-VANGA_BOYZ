@@ -1,12 +1,11 @@
-const mongoose = require('mongoose');
-const PermissionSchema = require('./permission').schema;
+const mongoose = require("mongoose");
+const PermissionSchema = require("./permission").schema;
 
 const RoleSchema = new mongoose.Schema({
   roleName: {
     type: String,
-    required: true
   },
-  permissions: [PermissionSchema]
+  permissions: [PermissionSchema],
 });
 
-module.exports = mongoose.model('Role', RoleSchema);
+module.exports = mongoose.model("Role", RoleSchema);
