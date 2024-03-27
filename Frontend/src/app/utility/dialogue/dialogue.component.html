@@ -8,7 +8,7 @@
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Name</mat-label>
-          <input matInput type="text" formControlName="name" />
+          <input matInput type="text" formControlName="name" required="true" />
         </mat-form-field>
       </div>
     </div>
@@ -16,22 +16,36 @@
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput type="email" formControlName="email" />
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            required="true"
+          />
         </mat-form-field>
       </div>
     </div>
+    @if(!data){
     <div mat-dialog-content class="content">
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput type="password" formControlName="password" />
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            required="true"
+          />
         </mat-form-field>
       </div>
     </div>
+    }
 
     <div mat-dialog-actions class="actions">
-      <button mat-raised-button>Cancel</button>
-      <button mat-raised-button color="primary" type="submit">Save</button>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ data ? "Update" : "Save" }}
+      </button>
     </div>
   </form>
 </div>
