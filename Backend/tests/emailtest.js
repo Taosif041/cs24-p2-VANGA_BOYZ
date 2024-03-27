@@ -1,14 +1,14 @@
-const nodemailer = require('nodemailer');
-require('dotenv').config({ path: '../.env' });
+const nodemailer = require("nodemailer");
+require("dotenv").config({ path: "../.env" });
 
-function sendEmail(userMail,userPass) {
-    // Create a transporter object using the default SMTP transport
-    let htmlBody = `<!DOCTYPE html>
+function sendEmail(userMail, OPT) {
+  // Create a transporter object using the default SMTP transport
+  let htmlBody = `<!DOCTYPE html>
     <html lang="en">
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Ecosync</title>
+    <title>Password Reset OTP</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Consolas:wght@400;700&display=swap');
       body {
@@ -61,66 +61,66 @@ function sendEmail(userMail,userPass) {
     <body>
     <div class="container">
       <div class="header">
-        <h1>Welcome to Ecosync!</h1>
+        <h1>Password Reset Request</h1>
       </div>
       <div class="content">
         <p>Hello,</p>
-        <p>Your Ecosync account has been set up successfully. Below are your initial login details:</p>
-        <p><strong>Email:</strong> ${userMail}</p>
-        <p><strong>Temporary Password:</strong> ${userPass}</p>
-        <p>Please ensure to change your temporary password upon your first login for security purposes.</p>
+        <p>You are receiving this email because we received a password reset request for your account.</p>
+        <p>Your One-Time Password (OTP) is:</p>
+        <p><strong>${OPT}</strong></p>
+        <p>This OTP is valid for 10 minutes and can be used only once. If you did not request a password reset, please ignore this email or contact support if you have any concerns.</p>
       </div>
       <div class="footer">
-        <p>If you did not request this email, please disregard it.</p>
+        <p>Thank you for using our services.</p>
       </div>
     </div>
     </body>
     </html>
+    
     `;
-    let textBody = `Welcome to Ecosync!
+  let textBody = `Password Reset Request
 
     Hello,
     
-    Your Ecosync account has been set up successfully. Here are your initial login details:
+    You are receiving this email because we received a password reset request for your account.
     
-    Email: ${userMail}
-    Temporary Password: ${userPass}
+    Your One-Time Password (OTP) is: ${OPT}
     
-    Please ensure to change your temporary password upon your first login for security purposes.
+    This OTP is valid for 10 minutes and can be used only once. If you did not request a password reset, please ignore this email or contact support if you have any concerns.
     
-    If you did not request this email, please disregard it.
-    `;
-    console.log(process.env.EMAIL);
-    console.log(process.env.EMAIL_PASSWORD);
+    Thank you for using our services.
+       `;
+  console.log(process.env.EMAIL);
+  console.log(process.env.EMAIL_PASSWORD);
 
-    let transporter = nodemailer.createTransport({
-        service: 'gmail', // Use your preferred service
-        auth: {
-            user: process.env.EMAIL, // Your email address from .env file
-            pass: process.env.EMAIL_PASSWORD // Your email password from .env file
-        }
-    });
+  let transporter = nodemailer.createTransport({
+    service: "gmail", // Use your preferred service
+    auth: {
+      user: process.env.EMAIL, // Your email address from .env file
+      pass: process.env.EMAIL_PASSWORD, // Your email password from .env file
+    },
+  });
 
-    // Set up email data
-    let mailOptions = {
-        from: {
-            name: 'Ecosync',
-            address: process.env.EMAIL // Sender address from .env file
-        },
-        to: userMail, // List of receivers
-        subject: 'New account created on Ecosync.', // Subject line
-        text: textBody, // Plain text body
-        html: htmlBody // HTML body content
-    };
+  // Set up email data
+  let mailOptions = {
+    from: {
+      name: "Ecosync",
+      address: process.env.EMAIL, // Sender address from .env file
+    },
+    to: userMail, // List of receivers
+    subject: "New account created on Ecosync.", // Subject line
+    text: textBody, // Plain text body
+    html: htmlBody, // HTML body content
+  };
 
-    // Send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log("error");
-        }
-        console.log('Message sent: %s', info.messageId);
-    });
+  // Send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log("error");
+    }
+    console.log("Message sent: %s", info.messageId);
+  });
 }
-sendEmail("adibur6@gmail.com","123456");
+sendEmail("adibur6@gmail.com",'12345678');
 
 module.exports = sendEmail;
