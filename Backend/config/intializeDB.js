@@ -1,9 +1,11 @@
-const Role = require('./models/Role');
-const Permission = require('./models/Permission');
+const Role = require('../models/role');
+const Permission = require('../models/permission');
+const connectDB = require('./db');
 
 async function initializeDB() {
   try {
-    // Define permissions
+    connectDB();
+
     const permissions = [
       'Add/Remove Users',
       'Assign/Unassign Roles to Users',
@@ -16,32 +18,35 @@ async function initializeDB() {
       'Log vehicle arrivals and departures including mileage'
     ];
 
-    // Create permissions in the database
-    const createdPermissions = await Permission.insertMany(permissions.map(name => ({ name })));
+    const createdPermissions = await Promise.all(
+      permissions.map(name => new Permission({ type: name }).save())
+    );
 
-    // Define roles and their permissions
     const roles = [
       {
         name: 'System Admin',
-        permissions: createdPermissions.slice(0, 8).map(p => p._id) // First 8 permissions
+        permissions: createdPermissions.slice(0, 8)
       },
       {
         name: 'STS Manager',
-        permissions: [createdPermissions[8]._id] // Last permission
+        permissions: [createdPermissions[8]]
       },
       {
         name: 'Landfill Manager',
-        permissions: [createdPermissions[8]._id] // Last permission
+        permissions: [createdPermissions[8]]
       }
     ];
 
-    // Create roles in the database
-    await Role.insertMany(roles.map(({ name, permissions }) => ({ roleName: name, permissions })));
+    await Promise.all(
+      roles.map(({ name, permissions }) => new Role({ roleName: name, permissions }).save())
+    );
 
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Failed to initialize database', error);
   }
 }
+
+initializeDB();
 
 module.exports = initializeDB;

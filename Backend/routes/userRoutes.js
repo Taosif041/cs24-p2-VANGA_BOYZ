@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('./userController'); // Assuming you have a userController
+const userController = require('../controllers/userController'); // Assuming you have a userController
 
 // GET method for listing all users (System Admin access)
 router.get('/', userController.listAllUsers);
