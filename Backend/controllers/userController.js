@@ -98,8 +98,11 @@ exports.updateUserDetails = async (req, res) => {
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
+    // Delete the password field before sending the user details
+    let user = { ...updatedUser._doc };
+    delete user.password;
 
-    res.status(200).json(updatedUser);
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while updating the user",
@@ -148,7 +151,8 @@ exports.updateUserRoles = async (req, res) => {
     }
 
     const roleNames = req.body;
-    const roles = await Role.find({ name: { $in: roleNames } });
+    console.log(roleNames);
+    const roles = await Role.find({ roleName: { $in: roleNames } });
     if (roles.length !== roleNames.length) {
       return res.status(400).json({ message: "One or more roles are invalid" });
     }
@@ -161,8 +165,10 @@ exports.updateUserRoles = async (req, res) => {
     user.roles = roles;
     await user.save();
     // Delete the password field before sending the user details
-    delete user.password;
-    res.status(200).json(user);
+    let user1 = { ...user._doc };
+    delete user1.password;
+  
+    res.status(200).json(user1);
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while updating user roles",

@@ -6,6 +6,7 @@ router.post('/login', authController.login);
 //router.post('/logout', authController.logout);
 router.post('/reset-password/initiate', authController.initiatePasswordReset);
 router.post('/reset-password/confirm', authController.confirmPasswordReset);
+router.post('/reset-password/change-password', authController.changePasswordInPasswordReset);
 router.post('/change-password', authController.changePassword);
 
 module.exports = router;

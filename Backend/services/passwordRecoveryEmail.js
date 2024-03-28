@@ -105,7 +105,7 @@ async function sendEmail(userMail, OPT) {
       address: process.env.EMAIL, // Sender address from .env file
     },
     to: userMail, // List of receivers
-    subject: "New account created on Ecosync.", // Subject line
+    subject: "Password Change", // Subject line
     text: textBody, // Plain text body
     html: htmlBody, // HTML body content
   };
