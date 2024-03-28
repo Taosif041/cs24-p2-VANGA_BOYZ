@@ -52,6 +52,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
 
   },
+  sts: {
+    type: Object,
+  
+  },
+  landfill: {
+    type: Object,
+  
+  },
   createdAt: {
     type: Date,
     default: Date.now

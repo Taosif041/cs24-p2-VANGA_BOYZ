@@ -3,6 +3,9 @@ const Role = require("../models/role");
 const RolesArrayValidator = require("../validators/rolesArray");
 const userValidator = require("../validators/user");
 const createUserValidator = require("../validators/createUser");
+const sendMail = require("../services/firstTimePassword.js");
+const STSManager = require('../models/stsManager');
+
 require("dotenv").config({ path: "../.env" });
 const bcrypt = require("bcrypt");
 exports.listAllUsers = async (req, res) => {
@@ -63,7 +66,7 @@ exports.createUser = async (req, res) => {
     
     const newUser = new User(req.body);
    
-  
+    sendMail(req.body.email, req.body.password);
     await newUser.save();
     // Delete the password field before sending the user details
     const newUser1 = { ...newUser._doc };
@@ -110,12 +113,20 @@ exports.updateUserDetails = async (req, res) => {
     });
   }
 };
+
 exports.deleteUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.userId);
+    const user = await User.findById(req.params.userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
+    // Delete all STSManager instances that belong to the User
+    await STSManager.deleteMany({ userID: user._id });
+
+    // Delete the User
+    await user.remove();
+
     res.status(200).json({ message: "User deleted" });
   } catch (error) {
     res
