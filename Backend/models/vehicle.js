@@ -1,38 +1,50 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const VehicleSchema = new mongoose.Schema({
   registrationNumber: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   type: {
     type: String,
-    enum: ['Open Truck', 'Dump Truck', 'Compactor', 'Container Carrier'],
-    required: true
+    enum: ["Open Truck", "Dump Truck", "Compactor", "Container Carrier"],
+    required: true,
   },
   capacity: {
     type: Number,
-    required: true
+    enum: [3, 5, 7, 15],
+    required: true,
   },
   fuelCostPerKmLoaded: {
     type: Number,
-    required: true
+    required: true,
   },
   fuelCostPerKmUnloaded: {
     type: Number,
-    required: true
+    required: true,
   },
   stsID: {
-    type: String
-  
+    type: String,
+    required: true,
   },
   status: {
     type: String,
-    enum: ['inSts', 'goingToLandfill', 'inLandfill', 'returningToSts'],
-  
-  }
-  // Additional attributes as necessary
+    enum: ["inSts", "goingToLandfill", "inLandfill", "returningToSts"],
+    default: "inSts",
+  },
+  usage: [
+    {
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+      count: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
 });
 
-module.exports = mongoose.model('Vehicle', VehicleSchema);
+module.exports = mongoose.model("Vehicle", VehicleSchema);

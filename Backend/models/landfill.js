@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const LandfillSchema = new mongoose.Schema({
   LandfillName: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   capacity: {
     type: Number,
@@ -19,7 +20,7 @@ const LandfillSchema = new mongoose.Schema({
   },
   managers: {
     type: [String],
-    required: true
+    
   }
 });
 

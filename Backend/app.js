@@ -4,7 +4,9 @@ const express = require('express');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes'); // Import userRoutes
 const rbacRoutes = require('./routes/rbacRoutes'); // Import rbacRoutes
-const vehicleRoutes = require('./routes/vehicleRoutes'); // Import rbacRoutes
+const vehicleRoutes = require('./routes/vehicleRoutes'); // Import vehicleRoutes
+const stsRoutes = require('./routes/stsRoutes'); // Import stsRoutes
+const landfillRoutes = require('./routes/landfillRoutes'); // Import landfillRoutes
 const connectDB = require('./config/db');
 const authMiddleware = require('./middlewares/authMiddleware');
 
@@ -22,11 +24,13 @@ app.use((error, req, res, next) => {
   next();
 });
 
-//app.use(authMiddleware);
-app.use('/auth', authRoutes);
 app.use('/user', userRoutes); // Use userRoutes
 app.use('/rbac', rbacRoutes); // Use rbacRoutes
-app.use('/vehicles', vehicleRoutes); // Use rbacRoutes
+app.use('/vehicles', vehicleRoutes); // Use vehicleRoutes
+app.use('/sts',stsRoutes); // Use stsRoutes
+
+app.use(authMiddleware); // Use authMiddleware
+app.use('/auth', authRoutes); // Use authRoutes
 
 // Middleware for handling undefined routes
 app.use((req, res) => {

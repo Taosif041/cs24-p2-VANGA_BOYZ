@@ -86,7 +86,7 @@ exports.deleteSTS = async (req, res) => {
 };
 
 
-exports.assignManagersToSTS = async (req, res) => {
+exports.assignManagerToSTS = async (req, res) => {
   const { userIDs } = req.body;
 
   // Check all userIDs exist
@@ -174,6 +174,46 @@ exports.assignTruckToSTS = async (req, res) => {
     const updatedSTS = await sts.save();
 
     res.status(200).json(updatedSTS);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getVehicles = async (req, res) => {
+  try {
+    const sts = await STS.findById(req.params.stsId);
+    if (!sts) {
+      return res.status(404).json({ message: 'Cannot find STS' });
+    }
+
+    let vehicles = await Vehicle.find({ stsID: req.params.stsId });
+
+    // Get today's date at midnight
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Iterate over the vehicles to add today's usage data if it's not present
+    vehicles = vehicles.map(vehicle => {
+      const vehicleObj = vehicle.toObject();
+
+      // Find the usage data for today
+      const todaysUsageData = vehicleObj.usage.find(usage => {
+        const usageDate = new Date(usage.date);
+        usageDate.setHours(0, 0, 0, 0);
+        return usageDate.getTime() === today.getTime();
+      });
+
+      // If today's usage data is not present, set todaysUsage to 0
+      // Otherwise, set todaysUsage to the count for today
+      vehicleObj.todaysUsage = todaysUsageData ? todaysUsageData.count : 0;
+
+      // Remove the usage array
+      delete vehicleObj.usage;
+
+      return vehicleObj;
+    });
+
+    return res.status(200).json(vehicles);
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
