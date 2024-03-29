@@ -24,12 +24,11 @@ app.use((error, req, res, next) => {
   next();
 });
 
-app.use('/user', userRoutes); // Use userRoutes
-app.use('/rbac', rbacRoutes); // Use rbacRoutes
-app.use('/vehicles', vehicleRoutes); // Use vehicleRoutes
-app.use('/sts',stsRoutes); // Use stsRoutes
-
-app.use(authMiddleware); // Use authMiddleware
+app.use('/user', authMiddleware,userRoutes); // Use userRoutes
+app.use('/rbac',authMiddleware, rbacRoutes); // Use rbacRoutes
+app.use('/vehicles',authMiddleware, vehicleRoutes); // Use vehicleRoutes
+app.use('/sts',authMiddleware,stsRoutes); // Use stsRoutes
+app.use('/landfill',authMiddleware,landfillRoutes); // Use landfillRoutes
 app.use('/auth', authRoutes); // Use authRoutes
 
 // Middleware for handling undefined routes

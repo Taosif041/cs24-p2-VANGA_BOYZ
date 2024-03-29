@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
   },
   roles: {
     type: [RoleSchema],
-    default: undefined
+    default: []
   },
   
   dateOfBirth: {
@@ -50,14 +50,17 @@ const UserSchema = new mongoose.Schema({
   },
   country: {
     type: String,
+    default: 'Bangladesh'
 
   },
   sts: {
     type: Object,
+    default:{}
   
   },
   landfill: {
     type: Object,
+    default:{}
   
   },
   createdAt: {

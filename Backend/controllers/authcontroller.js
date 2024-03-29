@@ -62,7 +62,7 @@ authController.confirmPasswordReset = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, reset: true },
       process.env.JWT_SECRET,
-      { expiresIn: "24h" }
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({ message: "Password reset confirmed", token });

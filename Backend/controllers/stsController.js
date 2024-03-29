@@ -70,14 +70,14 @@ exports.deleteSTS = async (req, res) => {
     const updatePromises = stsManagers.map(async (stsManager) => {
       const user = await User.findById(stsManager.userID);
       if (user.sts && user.sts._id.toString() === sts._id.toString()) {
-        user.sts = undefined;
+        user.sts = {};
         return user.save();
       }
     });
     await Promise.all(updatePromises);
 
     // Delete the STS
-    await sts.remove();
+    await sts.deleteOne();
 
     res.status(200).json({ message: "Deleted STS" });
   } catch (err) {

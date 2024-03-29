@@ -20,6 +20,7 @@ const LandfillSchema = new mongoose.Schema({
   },
   managers: {
     type: [String],
+    default: []
     
   }
 });

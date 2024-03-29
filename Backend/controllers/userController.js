@@ -5,6 +5,9 @@ const userValidator = require("../validators/user");
 const createUserValidator = require("../validators/createUser");
 const sendMail = require("../services/firstTimePassword.js");
 const STSManager = require('../models/stsManager');
+const LandfillManager = require('../models/landfillManager');
+const STS = require('../models/sts');
+const Landfill = require('../models/landfill');
 
 require("dotenv").config({ path: "../.env" });
 const bcrypt = require("bcrypt");
@@ -121,11 +124,16 @@ exports.deleteUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Delete all STSManager instances that belong to the User
+    // Delete all STSManager and LandfillManager instances that belong to the User
     await STSManager.deleteMany({ userID: user._id });
+    await LandfillManager.deleteMany({ userID: user._id });
+
+    // Remove the user's ID from sts.manager and landfill.manager lists
+    await STS.updateOne({ managers: user._id }, { $pull: { managers: user._id } });
+    await Landfill.updateOne({ managers: user._id }, { $pull: { managers: user._id } });
 
     // Delete the User
-    await user.remove();
+    await User.deleteOne({ _id: user._id });
 
     res.status(200).json({ message: "User deleted" });
   } catch (error) {
@@ -162,7 +170,7 @@ exports.updateUserRoles = async (req, res) => {
     }
 
     const roleNames = req.body;
-    console.log(roleNames);
+  
     const roles = await Role.find({ roleName: { $in: roleNames } });
     if (roles.length !== roleNames.length) {
       return res.status(400).json({ message: "One or more roles are invalid" });
