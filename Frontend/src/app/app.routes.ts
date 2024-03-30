@@ -1,3 +1,4 @@
+import { ChangeInfoComponent } from './modules/authenticatedUserModule/change-info/change-info.component';
 import { HomeComponent } from './modules/homeModule/home/home.component';
 import { Routes } from '@angular/router';
 
@@ -9,6 +10,7 @@ import { FogetPasswordComponent } from './modules/loginModule/foget-password/fog
 import { ProvideOTPComponent } from './modules/loginModule/provide-otp/provide-otp.component';
 import { ChangePasswordComponent } from './modules/loginModule/change-password/change-password.component';
 import { LandfillComponent } from './modules/systemAdminModule/landfill/landfill/landfill.component';
+import { DashboardComponent } from './modules/authenticatedUserModule/dashboard/dashboard.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,8 +21,11 @@ export const routes: Routes = [
   { path: 'provideotp', component: ProvideOTPComponent },
   { path: 'changepassword', component: ChangePasswordComponent },
 
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'changeinfo', component: ChangeInfoComponent },
+
   { path: 'vehicles', component: VehiclesComponent },
   { path: 'newuser', component: CreateNewUserComponent },
   { path: 'addsts', component: AddSTSComponent },
-  { path: 'addlandfill', component: LandfillComponent },
+  { path: 'landfill', component: LandfillComponent },
 ];

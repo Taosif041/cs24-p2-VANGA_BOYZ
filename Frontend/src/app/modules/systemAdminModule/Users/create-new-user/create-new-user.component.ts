@@ -13,6 +13,9 @@ import { MatListModule } from '@angular/material/list';
 import { UserService } from '../../../../services/user/user.service';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { CommonModule, NgFor } from '@angular/common';
+import { LandfillListDialogComponent } from '../landfill-list-dialog/landfill-list-dialog.component';
+import { StsListDialogComponent } from '../sts-list-dialog/sts-list-dialog.component';
 
 @Component({
   selector: 'app-create-new-user',
@@ -29,12 +32,19 @@ import { MatMenuModule } from '@angular/material/menu';
     MatButtonModule,
     MatListModule,
     MatMenuModule,
+    NgFor,
   ],
   templateUrl: './create-new-user.component.html',
   styleUrl: './create-new-user.component.scss',
 })
 export class CreateNewUserComponent implements OnInit {
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'action'];
+  displayedColumns: string[] = [
+    'firstName',
+    'lastName',
+    'email',
+    'roles',
+    'action',
+  ];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -102,6 +112,17 @@ export class CreateNewUserComponent implements OnInit {
         }
       },
       error: console.log,
+    });
+  }
+
+  openLandfillListDialog(): void {
+    const dialogRef = this.dialog.open(LandfillListDialogComponent, {
+      width: '500px',
+    });
+  }
+  openStsListDialog(): void {
+    const dialogRef = this.dialog.open(StsListDialogComponent, {
+      width: '500px',
     });
   }
 }

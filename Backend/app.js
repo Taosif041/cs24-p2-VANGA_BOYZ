@@ -9,11 +9,16 @@ const stsRoutes = require('./routes/stsRoutes'); // Import stsRoutes
 const landfillRoutes = require('./routes/landfillRoutes'); // Import landfillRoutes
 const connectDB = require('./config/db');
 const authMiddleware = require('./middlewares/authMiddleware');
+const cors = require('cors');
 
 const app = express();
 
 // Connect to MongoDB
 connectDB();
+// app.use(cors({ origin: 'http://localhost:4200' }));
+app.use(cors());
+
+
 
 app.use(express.json());
 // Error handling middleware for express.json

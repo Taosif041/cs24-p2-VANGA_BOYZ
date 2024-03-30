@@ -31,6 +31,7 @@ export class FogetPasswordComponent {
         },
         error: (error) => {
           // Handle error response here, such as displaying an error message to the user
+          this._snackbar.openSnackBar('User not found.', 'done');
           console.error('Error initiating reset password:', error);
         },
       });

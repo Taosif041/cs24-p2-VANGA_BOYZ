@@ -1,1 +1,9 @@
-<p>landfill-list-dialog works!</p>
+<h2>Landfill List</h2>
+
+<ul>
+  <li *ngFor="let landfill of landfills">
+    <!-- <button>{{ landfill.name }} - {{ landfill.location }}</button> -->
+    <button mat-raised-button color="primary">{{ landfill.title }}</button>
+  </li>
+</ul>
+<button mat-button (click)="closeDialog()">Close</button>

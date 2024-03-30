@@ -38,10 +38,12 @@
         Please enter the OTP.
       </div>
     </div>
-    <!-- <button type="submit" [disabled]="isLoading">Confirm</button> -->
-    <button type="submit" (click)="navigateToChange()">Confirm</button>
+    <button type="submit" (click)="confirm()">Confirm</button>
+    <!-- <button type="submit" (click)="navigateToChange()">Confirm</button> -->
 
-    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <div class="error-message" *ngIf="errorMessage">
+      Please provide correct OTP
+    </div>
     <div *ngIf="isLoading" class="loading-spinner"></div>
   </form>
 </div>

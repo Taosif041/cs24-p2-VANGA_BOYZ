@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from './services/authentiction/authentiction.service';
 
 @Component({
   selector: 'app-root',
@@ -32,11 +33,18 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'EcoSync';
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    public _authService: AuthenticationService
+  ) {}
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
   navigateToHome() {
+    this.router.navigate(['/home']);
+  }
+  logout() {
+    this._authService.logout();
     this.router.navigate(['/home']);
   }
 }

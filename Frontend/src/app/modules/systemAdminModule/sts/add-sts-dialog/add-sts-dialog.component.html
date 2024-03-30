@@ -6,6 +6,11 @@
   <form [formGroup]="stsForm" (ngSubmit)="onFormSubmit()">
     <div mat-dialog-content class="content">
       <mat-form-field appearance="outline">
+        <mat-label>STS Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
         <mat-label>Ward Number</mat-label>
         <input matInput formControlName="wardNumber" />
       </mat-form-field>

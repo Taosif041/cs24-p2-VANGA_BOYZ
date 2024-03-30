@@ -1,1 +1,34 @@
-<p>dashboard works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>User Info Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p><strong>First Name:</strong> {{ userInfo.firstName }}</p>
+    <p><strong>Last Name:</strong> {{ userInfo.lastName }}</p>
+    <p><strong>Email:</strong> {{ userInfo.email }}</p>
+    <p><strong>Country:</strong> {{ userInfo.country }}</p>
+    <p *ngIf="userInfo.phoneNumber">
+      <strong>PhoneNumber:</strong> {{ userInfo.phoneNumber }}
+    </p>
+    <p *ngIf="userInfo.address">
+      <strong>Address:</strong> {{ userInfo.address }}
+    </p>
+
+    <p><strong>Roles:</strong></p>
+    <ul>
+      <li *ngFor="let role of userInfo.roles">{{ role.roleName }}</li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="openDilogForm()">
+      Edit Data
+    </button>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="navigateToChangePassword()"
+    >
+      Change Password
+    </button>
+  </mat-card-actions>
+</mat-card>

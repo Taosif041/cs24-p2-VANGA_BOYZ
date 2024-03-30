@@ -34,6 +34,7 @@ import { StsService } from '../../../../services/sts/sts.service';
 })
 export class AddSTSComponent implements OnInit {
   displayedColumns: string[] = [
+    'name',
     'wardNumber',
     'capacity',
     'gpsLat',

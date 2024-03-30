@@ -44,6 +44,7 @@ export class AddStsDialogComponent {
   ) {
     this.stsForm = this._fb.group({
       id: '',
+      name: ['', Validators.required],
       wardNumber: ['', Validators.required],
       capacity: ['', Validators.required],
       gpsLat: ['', Validators.required],

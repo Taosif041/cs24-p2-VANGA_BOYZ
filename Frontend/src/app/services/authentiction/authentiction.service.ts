@@ -1,25 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
-  useClass: AuthenticationService,
 })
 export class AuthenticationService {
   private apiUrl = 'http://localhost:3000/auth/login'; // Use HTTPS in production
+  private api = 'http://localhost:3000/'; // Use HTTPS in production
+  user$: any;
 
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<any> {
     return this.http
-      .post<any>(`${this.apiUrl}/login`, { email, password }) // Ensure the endpoint is correct
+      .post<any>(`${this.apiUrl}`, { email, password }) // Ensure the endpoint is correct
       .pipe(
         map((response) => {
           // Store token securely or consider other storage mechanisms
           if (response && response.token) {
-            localStorage.setItem('token', response.token); // Consider security implications
+            if (typeof localStorage !== 'undefined') {
+              localStorage.setItem('token', response.token); // Consider security implications
+            }
           }
           return response;
         }),
@@ -31,14 +35,34 @@ export class AuthenticationService {
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // Ensure to clear any other auth-related data
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('token'); // Ensure to clear any other auth-related data
+    }
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    if (typeof localStorage !== 'undefined') {
+      return !!localStorage.getItem('token');
+    }
+    return false;
   }
 
   getAuthToken(): string | null {
-    return localStorage.getItem('token');
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('token');
+    }
+    return null;
+  }
+  public getUser(): any {
+    const token = this.getAuthToken();
+    if (token) {
+      // Decode the token to get user data
+      const decoded = jwtDecode(token);
+      console.log(decoded);
+      return decoded;
+    } else {
+      // Token is null, handle this case accordingly
+      return null;
+    }
   }
 }
