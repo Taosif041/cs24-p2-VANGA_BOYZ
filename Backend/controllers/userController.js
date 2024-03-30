@@ -63,13 +63,13 @@ exports.createUser = async (req, res) => {
     // Get the salt rounds from the environment variable
     const saltRounds = Number(process.env.SALT_ROUNDS);
 
+    sendMail(req.body.email, req.body.password);
     // Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
     req.body.password = hashedPassword;
     
     const newUser = new User(req.body);
    
-    sendMail(req.body.email, req.body.password);
     await newUser.save();
     // Delete the password field before sending the user details
     const newUser1 = { ...newUser._doc };
