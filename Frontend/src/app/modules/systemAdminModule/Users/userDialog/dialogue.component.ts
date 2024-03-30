@@ -46,7 +46,8 @@ export class DialogueComponent implements OnInit {
     private _snackbar: SnackbarService
   ) {
     this.userForm = this._fb.group({
-      name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
     });
@@ -57,18 +58,21 @@ export class DialogueComponent implements OnInit {
   onFormSubmit() {
     if (this.userForm.valid) {
       if (this.data) {
-        this._userService
-          .updateUser(this.data.id, this.userForm.value)
-          .subscribe({
-            next: (val: any) => {
-              this._snackbar.openSnackBar('User Updated successfully', 'done');
-              this._dialogRef.close(true);
-            },
-            error: (err) => {
-              console.log(err);
-            },
-          });
+        const { firstName, lastName } = this.userForm.value; // Extract firstName and lastName
+        const userData = { firstName, lastName }; // Create an object with only firstName and lastName
+        console.log(userData);
+
+        this._userService.updateUser(this.data._id, userData).subscribe({
+          next: (val: any) => {
+            this._snackbar.openSnackBar('User Updated successfully', 'done');
+            this._dialogRef.close(true);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
       } else {
+        console.log(this.userForm.value);
         this._userService.addUser(this.userForm.value).subscribe({
           next: (val: any) => {
             this._snackbar.openSnackBar('User added successfully', 'done');

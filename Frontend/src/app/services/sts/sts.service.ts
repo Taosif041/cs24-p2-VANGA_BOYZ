@@ -13,6 +13,9 @@ export class StsService {
   getStsList(): Observable<any> {
     return this._http.get(this.url);
   }
+  getStsById(id: string): Observable<any> {
+    return this._http.get(`http://localhost:3000/sts/${id}`);
+  }
 
   addSts(data: any): Observable<any> {
     return this._http.post(this.url, data);

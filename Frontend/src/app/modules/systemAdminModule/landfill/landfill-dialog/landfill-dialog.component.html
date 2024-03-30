@@ -1,0 +1,41 @@
+<div class="container">
+  <div mat-dialog-title>
+    <h1>{{ data ? "Update Landfill" : "Create New Landfill" }}</h1>
+  </div>
+
+  <form [formGroup]="landfillForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Capacity</mat-label>
+        <input matInput formControlName="capacity" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Operational Timespan</mat-label>
+        <input matInput formControlName="operationalTimespan" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>GPS Latitude</mat-label>
+        <input matInput formControlName="gpsLat" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>GPS Longitude</mat-label>
+        <input matInput formControlName="gpsLong" />
+      </mat-form-field>
+    </div>
+
+    <div mat-dialog-actions class="actions">
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">
+        {{ data ? "Update" : "Save" }}
+      </button>
+    </div>
+  </form>
+</div>

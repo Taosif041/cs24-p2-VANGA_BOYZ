@@ -13,6 +13,9 @@ export class UserService {
   getUserList(): Observable<any> {
     return this._http.get(this.url);
   }
+  getUserById(id: string): Observable<any> {
+    return this._http.get(`http://localhost:3000/user/${id}`);
+  }
 
   addUser(data: any): Observable<any> {
     return this._http.post(this.url, data);
