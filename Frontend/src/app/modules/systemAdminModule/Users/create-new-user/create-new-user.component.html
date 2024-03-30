@@ -1,4 +1,5 @@
 <div class="main-body">
+  <h1>User List</h1>
   <button mat-raised-button color="primary" (click)="openDilogForm()">
     Create New User
   </button>
@@ -16,9 +17,9 @@
   <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
       <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.firstName }}</td>
       </ng-container>
 
       <!-- Progress Column -->
@@ -28,9 +29,9 @@
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
       </ng-container>
 
       <!-- Fruit Column -->
@@ -40,7 +41,7 @@
           <button mat-icon-button color="primary" (click)="openEditForm(row)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="deleteUser(row.id)">
+          <button mat-icon-button color="warn" (click)="deleteUser(row._id)">
             <mat-icon>delete</mat-icon>
           </button>
           <button mat-icon-button [matMenuTriggerFor]="menu">

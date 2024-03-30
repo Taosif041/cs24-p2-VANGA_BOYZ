@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DialogueComponent } from '../userDialog/dialogue.component';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -10,15 +9,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 
-import { UserService } from '../../../../services/user/user.service';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { LandfillService } from '../../../../services/landfill/landfill.service';
+import { LandfillDialogComponent } from '../landfill-dialog/landfill-dialog.component';
 
 @Component({
-  selector: 'app-create-new-user',
+  selector: 'app-landfill',
   standalone: true,
   imports: [
-    DialogueComponent,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
@@ -30,11 +29,19 @@ import { MatMenuModule } from '@angular/material/menu';
     MatListModule,
     MatMenuModule,
   ],
-  templateUrl: './create-new-user.component.html',
-  styleUrl: './create-new-user.component.scss',
+  templateUrl: './landfill.component.html',
+  styleUrl: './landfill.component.scss',
 })
-export class CreateNewUserComponent implements OnInit {
-  displayedColumns: string[] = ['firstName', 'lastName', 'email', 'action'];
+export class LandfillComponent implements OnInit {
+  displayedColumns: string[] = [
+    'name',
+    'capacity',
+
+    'operationalTimespan',
+    'gpsLat',
+    'gpsLong',
+    'action',
+  ];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -42,27 +49,27 @@ export class CreateNewUserComponent implements OnInit {
 
   constructor(
     private _dialogue: MatDialog,
-    private _userService: UserService,
+    private _landfillervice: LandfillService,
     private _snackbar: SnackbarService,
     public dialog: MatDialog
   ) {}
   ngOnInit(): void {
-    this.getUserList();
+    this.getLandfillList();
   }
 
   openDilogForm() {
-    const DialogRef = this._dialogue.open(DialogueComponent);
+    const DialogRef = this._dialogue.open(LandfillDialogComponent);
     DialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
-          this.getUserList();
+          this.getLandfillList();
         }
       },
       error: console.log,
     });
   }
-  getUserList() {
-    this._userService.getUserList().subscribe({
+  getLandfillList() {
+    this._landfillervice.getLandfillList().subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
@@ -82,23 +89,23 @@ export class CreateNewUserComponent implements OnInit {
     }
   }
 
-  deleteUser(id: string) {
-    this._userService.deleteUser(id).subscribe({
+  deleteLandfill(id: string) {
+    this._landfillervice.deleteLandfill(id).subscribe({
       next: (res) => {
-        this._snackbar.openSnackBar('User deleted successfully', 'done');
-        this.getUserList();
+        this._snackbar.openSnackBar('landfill deleted successfully', 'done');
+        this.getLandfillList();
       },
       error: console.log,
     });
   }
   openEditForm(data: any) {
-    const DialogRef = this._dialogue.open(DialogueComponent, {
+    const DialogRef = this._dialogue.open(LandfillDialogComponent, {
       data,
     });
     DialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
-          this.getUserList();
+          this.getLandfillList();
         }
       },
       error: console.log,

@@ -1,3 +1,21 @@
-body {
-  margin-left: 500px;
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 250px;
+  background-color: rgb(241, 245, 243);
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+.matInput {
+  width: 500px;
 }

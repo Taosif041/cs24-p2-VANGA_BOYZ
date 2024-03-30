@@ -3,6 +3,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 
 import {
   MAT_DIALOG_DATA,
@@ -17,10 +18,9 @@ import {
   Validators,
 } from '@angular/forms';
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
-import { VehicleService } from './../../../../services/vehicle/vehicle.service';
-
+import { LandfillService } from './../../../../services/landfill/landfill.service';
 @Component({
-  selector: 'app-vehicle-dialog',
+  selector: 'app-landfill-dialog',
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -29,41 +29,41 @@ import { VehicleService } from './../../../../services/vehicle/vehicle.service';
     ReactiveFormsModule,
     MatButtonModule,
     MatDialogClose,
+    MatMenuModule,
   ],
-  templateUrl: './vehicle-dialog.component.html',
-  styleUrl: './vehicle-dialog.component.scss',
+  templateUrl: './landfill-dialog.component.html',
+  styleUrl: './landfill-dialog.component.scss',
 })
-export class VehicleDialogComponent {
-  vehicleForm: FormGroup;
+export class LandfillDialogComponent {
+  landfillForm: FormGroup;
   constructor(
     private _fb: FormBuilder,
-    private _vehicleService: VehicleService,
-    private _dialogRef: MatDialogRef<VehicleDialogComponent>,
+    private _landfillService: LandfillService,
+    public _dialogRef: MatDialogRef<LandfillDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private _snackbar: SnackbarService
+    public _snackbar: SnackbarService
   ) {
-    this.vehicleForm = this._fb.group({
+    this.landfillForm = this._fb.group({
       id: '',
-      registrationNumber: ['', Validators.required],
-      type: ['', Validators.required],
+      name: ['', Validators.required],
       capacity: ['', Validators.required],
-      fuelCostFullyLoaded: ['', [Validators.required, Validators.min(0)]],
-      fuelCostUnloaded: ['', [Validators.required, Validators.min(0)]],
-      assignedTo: '',
+      operationalTimespan: ['', Validators.required],
+      gpsLat: ['', Validators.required],
+      gpsLong: ['', Validators.required],
     });
   }
   ngOnInit(): void {
-    this.vehicleForm.patchValue(this.data);
+    this.landfillForm.patchValue(this.data);
   }
   onFormSubmit() {
-    if (this.vehicleForm.valid) {
+    if (this.landfillForm.valid) {
       if (this.data) {
-        this._vehicleService
-          .updateVehicles(this.data.id, this.vehicleForm.value)
+        this._landfillService
+          .updateLandfill(this.data.id, this.landfillForm.value)
           .subscribe({
             next: (val: any) => {
               this._snackbar.openSnackBar(
-                'vehicle Updated successfully',
+                'landfill Updated successfully',
                 'done'
               );
               this._dialogRef.close(true);
@@ -73,9 +73,9 @@ export class VehicleDialogComponent {
             },
           });
       } else {
-        this._vehicleService.addVehicles(this.vehicleForm.value).subscribe({
+        this._landfillService.addLandfill(this.landfillForm.value).subscribe({
           next: (val: any) => {
-            this._snackbar.openSnackBar('vehicle added successfully', 'done');
+            this._snackbar.openSnackBar('landfill added successfully', 'done');
             this._dialogRef.close(true);
           },
           error: (err) => {
