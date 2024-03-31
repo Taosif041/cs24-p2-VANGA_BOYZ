@@ -22,8 +22,19 @@ async function addVehicle(req, res) {
 
 async function getVehicles(req, res) {
   try {
-    const vehicles = await Vehicle.find({}, { usage: 0 }).populate('stsId');
-    res.status(200).json(vehicles);
+    const vehicles = await Vehicle.find({}, { usage: 0 });
+    const modifiedVehicles = await Promise.all(vehicles.map(async (vehicle) => {
+      if (vehicle.stsID) {
+        const sts = await STS.findById(vehicle.stsID);
+        if (sts) {
+          const { stsID, ...modifiedVehicle } = vehicle.toObject();
+          modifiedVehicle.sts = sts;
+          return modifiedVehicle;
+        }
+      }
+      return vehicle;
+    }));
+    res.status(200).json(modifiedVehicles);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -32,9 +43,17 @@ async function getVehicles(req, res) {
 // Controller function for retrieving a specific vehicle
 async function getVehicle(req, res) {
   try {
-    const vehicle = await Vehicle.findById(req.params.vehicleId).select('-usage').populate('stsId');
+    const vehicle = await Vehicle.findById(req.params.vehicleId).select('-usage');
     if (vehicle == null) {
       return res.status(404).json({ message: 'Cannot find vehicle' });
+    }
+    if (vehicle.stsID) {
+      const sts = await STS.findById(vehicle.stsID);
+      if (sts) {
+        const { stsID, ...modifiedVehicle } = vehicle.toObject();
+        modifiedVehicle.sts = sts;
+        return res.status(200).json(modifiedVehicle);
+      }
     }
     res.status(200).json(vehicle);
   } catch (err) {
