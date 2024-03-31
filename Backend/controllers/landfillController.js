@@ -2,6 +2,8 @@ const LandfillManager = require("../models/landfillManager");
 const User = require("../models/user");
 const Landfill = require("../models/landfill");
 const landfillValidator = require("../validators/landfill");
+const STS = require("../models/sts"); 
+const STSManager = require("../models/stsManager");
 
 exports.createLandfill = async (req, res) => {
   try {
@@ -119,6 +121,10 @@ exports.addManager = async (req, res) => {
 
     let landfill = await Landfill.findById(req.params.landfillId);
     if (!landfill) return res.status(404).json({ message: 'Cannot find landfill' });
+
+    if (landfill.managers.includes(managerId)) {
+      return res.status(400).json({ message: 'Manager already assigned to this landfill' });
+    }
 
     if (manager.sts || manager.landfill) {
       if (manager.sts) {

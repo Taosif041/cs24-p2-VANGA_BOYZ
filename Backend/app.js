@@ -32,7 +32,7 @@ app.use((error, req, res, next) => {
 
 app.use('/user', authMiddleware,userRoutes); // Use userRoutes
 app.use('/rbac',authMiddleware, rbacRoutes); // Use rbacRoutes
-app.use('/vehicles',authMiddleware, vehicleRoutes); // Use vehicleRoutes
+app.use('/vehicles', authMiddleware,vehicleRoutes); // Use vehicleRoutes
 app.use('/sts',authMiddleware,stsRoutes); // Use stsRoutes
 app.use('/landfill',authMiddleware,landfillRoutes); // Use landfillRoutes
 app.use('/transfer-waste',authMiddleware, transferWasteRouter);

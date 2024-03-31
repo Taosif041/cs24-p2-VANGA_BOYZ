@@ -110,6 +110,12 @@ exports.addManager = async (req, res) => {
     
     const sts = await STS.findById(req.params.stsId);
     if (!sts) return res.status(404).json({ message: 'Cannot find STS' });
+
+    // Check if the user is already in the managers list
+    if (sts.managers.includes(userId)) {
+      return res.status(400).json({ message: "User is already a manager" });
+    }
+
     // Find any existing STSManager for the user
     const existingSTSManager = await STSManager.findOne({ userID: userId });
 
@@ -247,13 +253,18 @@ exports.getVehicles = async (req, res) => {
 exports.addVehicle = async (req, res) => {
   try {
     const { vehicleId } = req.body;
-    const newStsId = mongoose.Types.ObjectId(req.params.stsId);
+    const newStsId = req.params.stsId;
 
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) return res.status(400).json({ message: "Vehicle not found" });
     
     const newSTS = await STS.findById(newStsId);
     if (!newSTS) return res.status(404).json({ message: 'Cannot find STS' });
+
+    // Check if the vehicle is already assigned to the new STS
+    if (newSTS.assignedTrucks.includes(vehicleId)) {
+      return res.status(400).json({ message: 'Vehicle is already assigned to this STS' });
+    }
     // If the vehicle is currently assigned to an STS
     if (vehicle.stsID) {
       // Find the current STS
@@ -280,14 +291,14 @@ exports.addVehicle = async (req, res) => {
 
     res.status(200).json(newSTS);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message,hi:"hi" });
   }
 };
 
 exports.deleteVehicle = async (req, res) => {
   try {
     const { vehicleId } = req.body;
-    const stsId = mongoose.Types.ObjectId(req.params.stsId);
+    const stsId = req.params.stsId;
 
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) return res.status(400).json({ message: "Vehicle not found" });

@@ -16,6 +16,6 @@ router.get('/:stsId/vehicles', stsController.getVehicles);
 router.post('/:stsId/vehicles', stsController.addVehicle);
 
 // Delete a vehicle
-router.delete('/:stsId/vehicles/:vehicleId', stsController.deleteVehicle);
+router.delete('/:stsId/vehicles', stsController.deleteVehicle);
 
 module.exports = router;

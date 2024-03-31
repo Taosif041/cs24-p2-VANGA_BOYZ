@@ -203,3 +203,50 @@ exports.getAllWasteLogs = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.generateSlip = async (req, res) => {
+  try {
+    const { wasteLogId } = req.body;
+
+    if (!wasteLogId) {
+      return res.status(400).json({ message: 'wasteLogId is required' });
+    }
+
+    // Fetch the wasteLog from the database using the wasteLogId
+    const wasteLog = await WasteTransferLog.findById(wasteLogId)
+      .populate('vehicleId', 'registrationNumber type capacity')
+      .populate('stsId', 'name wardNumber gpsCoordinates')
+      .populate('landfillId', 'LandfillName gpsCoordinates');
+
+    if (!wasteLog) {
+      return res.status(404).json({ message: 'Waste log not found' });
+    }
+
+    // Generate the slip
+    const slip = {
+      landfill: {
+        LandfillName: wasteLog.landfillId.LandfillName,
+        gpsCoordinates: wasteLog.landfillId.gpsCoordinates
+      },
+      sts: {
+        name: wasteLog.stsId.name,
+        wardNumber: wasteLog.stsId.wardNumber,
+        gpsCoordinates: wasteLog.stsId.gpsCoordinates
+      },
+      vehicle: {
+        registrationNumber: wasteLog.vehicleId.registrationNumber,
+        type: wasteLog.vehicleId.type,
+        capacity: wasteLog.vehicleId.capacity
+      },
+      weightOfWaste: wasteLog.weightOfWaste,
+      status: wasteLog.status,
+      distance: wasteLog.distance,
+      date: wasteLog.date,
+      oilConsumed: wasteLog.oilConsumed
+    };
+
+    res.status(200).json({ slip });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
