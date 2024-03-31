@@ -6,30 +6,35 @@
   </label>
   <mat-form-field appearance="outline">
     <mat-label>Select Vehicle</mat-label>
-    <mat-select formControlName="vehicleId">
+    <mat-select
+      formControlName="vehicleId"
+      (selectionChange)="onVehicleSelection($event.value)"
+    >
       <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle._id">
-        <span><b>VehicleNo: </b>{{ vehicle.registrationNumber }}</span
-        >, <b>Capacity: </b><span>{{ vehicle.capacity }}</span>
+        @if(vehicle.todaysUsage<3){
+        <div>
+          <span><b>VehicleNo: </b>{{ vehicle.registrationNumber }}</span
+          >, <b>Capacity: </b><span>{{ vehicle.capacity }} tons</span>
+        </div>
+        }
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <mat-label>Select Landfill</mat-label>
-    <mat-select formControlName="landfillId">
+    <mat-select
+      formControlName="landfillId"
+      (selectionChange)="onLandfillSelection($event.value)"
+    >
       <mat-option *ngFor="let landfill of landfills" [value]="landfill._id">
-        <span><b>landfillName: </b>{{ landfill.LandfillName }}</span
-        >, <b>Capacity: </b><span>{{ landfill.capacity }}</span>
+        <span><b>landfillName: </b>{{ landfill.LandfillName }}</span>
       </mat-option>
     </mat-select>
   </mat-form-field>
   <label>
     Weight of Waste:
     <input type="number" formControlName="weightOfWaste" />
-  </label>
-  <label>
-    Distance:
-    <input type="number" formControlName="distance" />
   </label>
 
   <button type="submit" [disabled]="!vehicleForm.valid">Submit</button>

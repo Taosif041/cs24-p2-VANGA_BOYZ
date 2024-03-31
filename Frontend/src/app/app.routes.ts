@@ -30,6 +30,7 @@ export const routes: Routes = [
   { path: 'changeinfo', component: ChangeInfoComponent },
 
   { path: 'vehicles', component: VehiclesComponent },
+
   { path: 'newuser', component: CreateNewUserComponent },
   { path: 'addsts', component: AddSTSComponent },
   { path: 'landfill', component: LandfillComponent },
