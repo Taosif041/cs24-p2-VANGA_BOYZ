@@ -11,6 +11,7 @@ import { ProvideOTPComponent } from './modules/loginModule/provide-otp/provide-o
 import { ChangePasswordComponent } from './modules/loginModule/change-password/change-password.component';
 import { LandfillComponent } from './modules/systemAdminModule/landfill/landfill/landfill.component';
 import { DashboardComponent } from './modules/authenticatedUserModule/dashboard/dashboard.component';
+import { RecoverPasswordComponent } from './modules/loginModule/recover-password/recover-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'forgetpassword', component: FogetPasswordComponent },
   { path: 'provideotp', component: ProvideOTPComponent },
   { path: 'changepassword', component: ChangePasswordComponent },
+  { path: 'recoverpassword', component: RecoverPasswordComponent },
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'changeinfo', component: ChangeInfoComponent },

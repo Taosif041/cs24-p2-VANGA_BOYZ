@@ -43,6 +43,8 @@ export class ProvideOTPComponent {
       (response) => {
         // Handle successful confirmation
         console.log('OTP confirmed successfully');
+        localStorage.setItem('tempToken', response.token);
+        this.router.navigate(['recoverpassword']);
       },
       (error) => {
         this.errorMessage = error;
