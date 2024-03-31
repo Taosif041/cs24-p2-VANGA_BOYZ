@@ -59,6 +59,7 @@ exports.departureFromSTSToLandfill = async (req, res) => {
     wasteLog.status = "goingToLandfill";
     vehicle.status = "goingToLandfill";
     const today = new Date().setHours(0, 0, 0, 0);
+    wasteLog.date = new Date(today);
     const usageToday = vehicle.usage.find(
       (usage) => usage.date.getTime() === today
     );
@@ -88,22 +89,20 @@ exports.departureFromSTSToLandfill = async (req, res) => {
 
     wasteLog = await wasteLog.save();
 
-    wasteLog = await wasteLog
-      .populate("vehicleId stsId landfillId stsManagerId")
-      .execPopulate();
+   // wasteLog = await wasteLog.populate('vehicleId stsId landfillId stsManagerId').execPopulate();
 
     wasteLog = wasteLog.toJSON();
-    wasteLog.vehicle = wasteLog.vehicleId;
+    wasteLog.vehicle = vehicle.toJSON();
     delete wasteLog.vehicleId;
     delete wasteLog.vehicle.usage;
-    wasteLog.sts = wasteLog.stsId;
+    wasteLog.sts = sts.toJSON();
     delete wasteLog.stsId;
     delete wasteLog.sts.managers;
     delete wasteLog.sts.assignedTrucks;
-    wasteLog.landfill = wasteLog.landfillId;
+    wasteLog.landfill = landfill.toJSON();
     delete wasteLog.landfillId;
     delete wasteLog.landfill.managers;
-    wasteLog.stsManager = wasteLog.stsManagerId;
+   
     delete wasteLog.stsManagerId;
 
     res.status(201).json(wasteLog);
@@ -142,7 +141,7 @@ exports.departureFromLandfillToSTS = async (req, res) => {
     }
 
     wasteLog.status = "returningToSts";
-    wasteLog.landfillDepartureTimeToSts = new Date();
+    wasteLog.landfillDepartureTimetoSts = new Date();
     let vehicle = await Vehicle.findById(wasteLog.vehicleId);
     vehicle.status = "returningToSts";
     await vehicle.save();
