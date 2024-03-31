@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { HeaderComponent } from './modules/homeModule/header/header.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -18,7 +17,6 @@ import { SnackbarService } from './services/snackbar/snackbar.service';
   standalone: true,
   imports: [
     RouterOutlet,
-    HeaderComponent,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
