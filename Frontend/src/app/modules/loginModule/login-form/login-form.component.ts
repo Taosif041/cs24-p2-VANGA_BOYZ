@@ -44,28 +44,25 @@ export class LoginFormComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
-    console.log('hello');
-    console.log(this.formGroup.value);
   }
   // hello() {
   //   console.log(this.formGroup.value);
   // }
 
   login(): void {
-    console.log('eh');
-    console.log(this.formGroup.value);
-
     if (this.formGroup.valid) {
+      console.log('eh');
+      console.log(this.formGroup.value);
       const { email, password } = this.formGroup.value;
       this._authService.login(email, password).subscribe({
         next: (response) => {
           console.log('Login successful', response);
-          this._snackbarService.openSnackBar('Login successful', 'done');
+          this._snackbarService.openSnackBar('Login successful', 'Done');
           this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login failed', err);
-          this._snackbarService.openSnackBar('Login failed', 'error');
+          this._snackbarService.openSnackBar('Login failed', '');
         },
       });
     }

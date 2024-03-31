@@ -1,6 +1,6 @@
 <div class="container">
   <div mat-dialog-title>
-    <h1>{{ data ? "Update User" : "Create New User" }}</h1>
+    <h1>Update Your Info</h1>
   </div>
 
   <form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
@@ -38,7 +38,7 @@
             matInput
             type="tel"
             formControlName="phoneNumber"
-            [required]="false"
+            [required]="true"
           />
         </mat-form-field>
       </div>
@@ -51,7 +51,7 @@
             matInput
             type="text"
             formControlName="address"
-            [required]="false"
+            [required]="true"
           />
         </mat-form-field>
       </div>

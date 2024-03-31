@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService } from './services/authentiction/authentiction.service';
+import { SnackbarService } from './services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +36,8 @@ export class AppComponent {
   title = 'EcoSync';
   constructor(
     private router: Router,
-    public _authService: AuthenticationService
+    public _authService: AuthenticationService,
+    public _snackbarService: SnackbarService
   ) {}
   navigateToLogin() {
     this.router.navigate(['/login']);
@@ -45,6 +47,7 @@ export class AppComponent {
   }
   logout() {
     this._authService.logout();
+    this._snackbarService.openSnackBar('Logout successful', 'Done');
     this.router.navigate(['/home']);
   }
 }
