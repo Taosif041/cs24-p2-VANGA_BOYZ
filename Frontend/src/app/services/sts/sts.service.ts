@@ -8,7 +8,7 @@ import { AuthenticationService } from '../authentiction/authentiction.service';
 })
 export class StsService {
   private url = 'http://localhost:3000/sts';
-  private uul = 'https://jsonplaceholder.typicode.com/posts';
+  // private uul = 'https://jsonplaceholder.typicode.com/posts';
 
   constructor(
     private _http: HttpClient,
@@ -20,7 +20,9 @@ export class StsService {
   }
 
   getStsList(): Observable<any> {
-    return this._http.get(this.uul);
+    return this._http.get(this.url, {
+      headers: this.getHeaders(),
+    });
   }
   getStsById(id: string): Observable<any> {
     return this._http.get(`http://localhost:3000/sts/${id}`, {
@@ -40,6 +42,13 @@ export class StsService {
   }
   updateSts(id: string, data: any): Observable<any> {
     return this._http.put(`http://localhost:3000/sts/${id}`, data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  addManagerToSts(stsId: string, managerId: string): Observable<any> {
+    const data = { managerId };
+    return this._http.post(`${this.url}/${stsId}/managers`, data, {
       headers: this.getHeaders(),
     });
   }

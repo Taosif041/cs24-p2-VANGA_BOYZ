@@ -9,18 +9,15 @@ import { SnackbarService } from '../../../../services/snackbar/snackbar.service'
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sts-list-dialog',
+  selector: 'app-unassigned',
   standalone: true,
   imports: [NgFor, MatButton],
-  templateUrl: './sts-list-dialog.component.html',
-  styleUrl: './sts-list-dialog.component.scss',
+  templateUrl: './unassigned.component.html',
+  styleUrl: './unassigned.component.scss',
 })
-export class StsListDialogComponent {
-  sts: any[] = [];
-
+export class UnassignedComponent {
   constructor(
-    private dialogRef: MatDialogRef<StsListDialogComponent>,
-    private stsService: StsService,
+    private dialogRef: MatDialogRef<UnassignedComponent>,
     private authService: AuthenticationService,
     private roleService: RoleService,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -29,32 +26,18 @@ export class StsListDialogComponent {
   ) {}
 
   ngOnInit(): void {
-    this.getstsList();
     console.log('Received row ID:', this.data.id);
-  }
-
-  getstsList(): void {
-    this.stsService.getStsList().subscribe(
-      (response: any) => {
-        this.sts = response;
-      },
-      (error: any) => {
-        console.error('Error fetching sts list:', error);
-      }
-    );
   }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
-
-  updateRoles(stsId: string) {
-    const roles = ['STS Manager'];
+  updateRoles() {
+    const roles: string[] = [];
     this.roleService.updateUserRoles(this.data.id, roles).subscribe({
       next: (response) => {
         console.log('Roles updated', response);
-        this._snackbar.openSnackBar('STS manager role assigned', 'Done');
-        this.addManagerToSts(stsId); // Call addManagerToSts here
+        this._snackbar.openSnackBar('All role unassigned for the user', 'Done');
         this.closeDialog();
         this.dialogRef.close(true);
         // Handle response here
@@ -62,22 +45,6 @@ export class StsListDialogComponent {
       error: (error) => {
         console.error('Error updating roles', error);
         this._snackbar.openSnackBar('Error updating roles', 'Done');
-      },
-    });
-  }
-
-  addManagerToSts(stsId: string) {
-    const managerId = this.data.id; // Assuming this is the manager's ID
-    this.stsService.addManagerToSts(stsId, managerId).subscribe({
-      next: (response) => {
-        console.log('Manager added to STS', response);
-        this._snackbar.openSnackBar('Manager added to STS', 'Done');
-        // Handle success
-      },
-      error: (error) => {
-        console.error('Error adding manager to STS', error);
-        this._snackbar.openSnackBar('Manager added to STS', 'Done');
-        // Handle error
       },
     });
   }

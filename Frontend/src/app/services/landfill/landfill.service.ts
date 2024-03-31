@@ -20,7 +20,9 @@ export class LandfillService {
   }
 
   getLandfillList(): Observable<any> {
-    return this._http.get(this.uul);
+    return this._http.get(this.url, {
+      headers: this.getHeaders(),
+    });
   }
 
   getLandfillById(id: string): Observable<any> {
@@ -39,6 +41,13 @@ export class LandfillService {
   }
   updateLandfill(id: string, data: any): Observable<any> {
     return this._http.put(`http://localhost:3000/landfill/${id}`, data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  addManagerToLandfill(landfillId: string, managerId: string): Observable<any> {
+    const data = { managerId };
+    return this._http.post(`${this.url}/${landfillId}/managers`, data, {
       headers: this.getHeaders(),
     });
   }

@@ -33,10 +33,10 @@
         <mat-form-field appearance="outline">
           <mat-label>Capacity</mat-label>
           <mat-select formControlName="capacity" required>
-            <mat-option value="3 ton">3 ton</mat-option>
-            <mat-option value="5 ton">5 ton</mat-option>
-            <mat-option value="7 ton">7 ton</mat-option>
-            <mat-option value="15 ton">15 ton</mat-option>
+            <mat-option value="3">3 ton</mat-option>
+            <mat-option value="5">5 ton</mat-option>
+            <mat-option value="7">7 ton</mat-option>
+            <mat-option value="15">15 ton</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -47,7 +47,7 @@
           <input
             matInput
             type="number"
-            formControlName="fuelCostFullyLoaded"
+            formControlName="fuelCostPerKmLoaded"
             required
           />
         </mat-form-field>
@@ -59,7 +59,7 @@
           <input
             matInput
             type="number"
-            formControlName="fuelCostUnloaded"
+            formControlName="fuelCostPerKmUnloaded"
             required
           />
         </mat-form-field>

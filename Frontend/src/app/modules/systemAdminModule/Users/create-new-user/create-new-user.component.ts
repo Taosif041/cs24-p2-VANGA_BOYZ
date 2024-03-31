@@ -16,6 +16,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule, NgFor } from '@angular/common';
 import { LandfillListDialogComponent } from '../landfill-list-dialog/landfill-list-dialog.component';
 import { StsListDialogComponent } from '../sts-list-dialog/sts-list-dialog.component';
+import { DialogRef } from '@angular/cdk/dialog';
+import { UnassignedComponent } from '../unassigned/unassigned.component';
+import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
 
 @Component({
   selector: 'app-create-new-user',
@@ -115,14 +118,62 @@ export class CreateNewUserComponent implements OnInit {
     });
   }
 
-  openLandfillListDialog(): void {
-    const dialogRef = this.dialog.open(LandfillListDialogComponent, {
-      width: '600px',
-    });
-  }
-  openStsListDialog(): void {
+  openStsListDialog(rowId: string): void {
     const dialogRef = this.dialog.open(StsListDialogComponent, {
       width: '600px',
+      data: { id: rowId },
+    });
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getUserList();
+        }
+      },
+      error: console.log,
     });
   }
+  openLandfillListDialog(rowId: string): void {
+    const dialogRef = this.dialog.open(LandfillListDialogComponent, {
+      width: '400px',
+      data: { id: rowId },
+    });
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getUserList();
+        }
+      },
+      error: console.log,
+    });
+  }
+
+  openUnassignDialog(rowId: string): void {
+    const dialogRef = this.dialog.open(UnassignedComponent, {
+      width: '300px',
+      data: { id: rowId },
+    });
+    dialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getUserList();
+        }
+      },
+      error: console.log,
+    });
+  }
+
+  // openDeleteUserDialog(rowId: string): void {
+  //   const dialogRef = this.dialog.open(DeleteUserDialogComponent, {
+  //     width: '300px',
+  //     data: { id: rowId },
+  //   });
+  //   dialogRef.afterClosed().subscribe({
+  //     next: (val) => {
+  //       if (val) {
+  //         this.getUserList();
+  //       }
+  //     },
+  //     error: console.log,
+  //   });
+  // }
 }

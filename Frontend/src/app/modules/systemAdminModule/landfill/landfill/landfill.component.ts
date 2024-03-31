@@ -34,7 +34,7 @@ import { LandfillDialogComponent } from '../landfill-dialog/landfill-dialog.comp
 })
 export class LandfillComponent implements OnInit {
   displayedColumns: string[] = [
-    'name',
+    'LandfillName',
     'capacity',
 
     'operationalTimespan',
