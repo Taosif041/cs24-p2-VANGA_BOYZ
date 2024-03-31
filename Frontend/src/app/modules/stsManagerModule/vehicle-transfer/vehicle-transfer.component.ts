@@ -18,6 +18,7 @@ import { LandfillService } from '../../../services/landfill/landfill.service';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { VehiclesInStsService } from '../../../services/sts/vehicles-in-sts.service';
 import { DistanceCalculatorService } from '../../../services/shared/distance-calculator.service';
+import { WastelogService } from '../../../services/wastelog/wastelog.service';
 
 @Component({
   selector: 'app-vehicle-transfer',
@@ -46,7 +47,8 @@ export class VehicleTransferComponent implements OnInit {
     private snackBar: SnackbarService,
     private router: Router,
     private stsVehileService: VehiclesInStsService,
-    private distanceCalculatorService: DistanceCalculatorService
+    private distanceCalculatorService: DistanceCalculatorService,
+    private wastelogService: WastelogService
   ) {}
 
   ngOnInit(): void {
@@ -88,12 +90,12 @@ export class VehicleTransferComponent implements OnInit {
           'done'
         );
       } else {
-        this.router.navigateByUrl('/transferdata', { state: { formData } });
-
         this.snackBar.openSnackBar(
           'The truck started its journey towards landfill.',
           'done'
         );
+        this.transferWaste(formData);
+        this.router.navigateByUrl('/transferdata');
       }
 
       // Process the form data (e.g., send it to the server)
@@ -113,7 +115,7 @@ export class VehicleTransferComponent implements OnInit {
         this.userInfo = userData;
         this.sts_Id = this.userInfo.sts._id;
         this.stsInfo = this.userInfo.sts;
-        console.log(this.stsInfo);
+        console.log('stsInfo', this.stsInfo);
 
         this.getVehiclesList();
         this.getLandfills();
@@ -172,7 +174,7 @@ export class VehicleTransferComponent implements OnInit {
     this.calculate();
   }
   calculate() {
-    console.log(this.landfillInfo);
+    console.log('landfillInfo', this.landfillInfo);
     if (this.stsInfo && this.landfillInfo) {
       const calculate_distance =
         this.distanceCalculatorService.calculateDistance(
@@ -181,10 +183,31 @@ export class VehicleTransferComponent implements OnInit {
           this.landfillInfo.gpsCoordinates[0],
           this.stsInfo.gpsCoordinates[1]
         );
-      console.log(calculate_distance);
+      console.log('calculated_distance', calculate_distance);
       this.vehicleForm.patchValue({
         distance: calculate_distance,
       });
     }
+  }
+
+  transferWaste(formData: any): void {
+    this.wastelogService
+      .transferWasteFromSTSToLandfill(
+        formData.vehicleId,
+        formData.stsId,
+        formData.landfillId,
+        formData.weightOfWaste,
+        formData.distance
+      )
+      .subscribe(
+        (response) => {
+          // Handle successful response
+          console.log('Waste transfer successful:', response);
+        },
+        (error) => {
+          // Handle error
+          console.error('Error transferring waste:', error);
+        }
+      );
   }
 }
