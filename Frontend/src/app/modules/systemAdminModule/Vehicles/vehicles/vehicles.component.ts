@@ -13,6 +13,8 @@ import { MatListModule } from '@angular/material/list';
 
 import { SnackbarService } from '../../../../services/snackbar/snackbar.service';
 import { MatMenuModule } from '@angular/material/menu';
+import { StsListForVehicleComponent } from '../sts-list-for-vehicle/sts-list-for-vehicle.component';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-vehicles',
@@ -29,6 +31,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatButtonModule,
     MatListModule,
     MatMenuModule,
+    NgIf,
   ],
   templateUrl: './vehicles.component.html',
   styleUrl: './vehicles.component.scss',
@@ -40,6 +43,7 @@ export class VehiclesComponent implements OnInit {
     'capacity',
     'fuelCostFullyLoaded',
     'fuelCostUnloaded',
+    'assignedSts',
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
@@ -103,6 +107,20 @@ export class VehiclesComponent implements OnInit {
       data,
     });
     DialogRef.afterClosed().subscribe({
+      next: (val) => {
+        if (val) {
+          this.getVehiclesList();
+        }
+      },
+      error: console.log,
+    });
+  }
+  openStsListDialog(rowId: string): void {
+    const dialogRef = this.dialog.open(StsListForVehicleComponent, {
+      width: '600px',
+      data: { id: rowId },
+    });
+    dialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
           this.getVehiclesList();

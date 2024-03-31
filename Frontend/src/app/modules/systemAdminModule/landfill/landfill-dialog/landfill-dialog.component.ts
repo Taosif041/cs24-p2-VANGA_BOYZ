@@ -44,8 +44,7 @@ export class LandfillDialogComponent {
     public _snackbar: SnackbarService
   ) {
     this.landfillForm = this._fb.group({
-      id: '',
-      name: ['', Validators.required],
+      LandfillName: ['', Validators.required],
       capacity: ['', Validators.required],
       operationalTimespan: ['', Validators.required],
       gpsLat: ['', Validators.required],
@@ -57,9 +56,16 @@ export class LandfillDialogComponent {
   }
   onFormSubmit() {
     if (this.landfillForm.valid) {
+      const formData = this.landfillForm.value;
+      const formattedData = {
+        LandfillName: formData.LandfillName,
+        capacity: Number(formData.capacity),
+        operationalTimespan: formData.operationalTimespan,
+        gpsCoordinates: [Number(formData.gpsLat), Number(formData.gpsLong)],
+      };
       if (this.data) {
         this._landfillService
-          .updateLandfill(this.data.id, this.landfillForm.value)
+          .updateLandfill(this.data._id, formattedData)
           .subscribe({
             next: (val: any) => {
               this._snackbar.openSnackBar(
@@ -70,16 +76,18 @@ export class LandfillDialogComponent {
             },
             error: (err) => {
               console.log(err);
+              this._snackbar.openSnackBar('Error', 'done');
             },
           });
       } else {
-        this._landfillService.addLandfill(this.landfillForm.value).subscribe({
+        this._landfillService.addLandfill(formattedData).subscribe({
           next: (val: any) => {
             this._snackbar.openSnackBar('landfill added successfully', 'done');
             this._dialogRef.close(true);
           },
           error: (err) => {
             console.log(err);
+            this._snackbar.openSnackBar('Error', 'done');
           },
         });
       }

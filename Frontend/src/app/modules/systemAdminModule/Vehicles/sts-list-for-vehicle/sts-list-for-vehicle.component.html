@@ -1,7 +1,12 @@
+<h2>Sts List</h2>
+
 <ul>
-  <h2>STS List</h2>
   <li *ngFor="let Sts of sts">
-    <button mat-raised-button color="primary" (click)="updateRoles(Sts._id)">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="addVehicleToSts(Sts._id)"
+    >
       {{ Sts.name }}
     </button>
     <!-- <button mat-raised-button color="primary">{{ Sts.title }}</button> -->

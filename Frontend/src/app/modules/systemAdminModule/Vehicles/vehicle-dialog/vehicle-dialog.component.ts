@@ -43,13 +43,11 @@ export class VehicleDialogComponent {
     private _snackbar: SnackbarService
   ) {
     this.vehicleForm = this._fb.group({
-      id: '',
       registrationNumber: ['', Validators.required],
       type: ['', Validators.required],
       capacity: ['', Validators.required],
-      fuelCostFullyLoaded: ['', [Validators.required, Validators.min(0)]],
-      fuelCostUnloaded: ['', [Validators.required, Validators.min(0)]],
-      assignedTo: '',
+      fuelCostPerKmLoaded: ['', [Validators.required, Validators.min(0)]],
+      fuelCostPerKmUnloaded: ['', [Validators.required, Validators.min(0)]],
     });
   }
   ngOnInit(): void {
@@ -59,7 +57,7 @@ export class VehicleDialogComponent {
     if (this.vehicleForm.valid) {
       if (this.data) {
         this._vehicleService
-          .updateVehicles(this.data.id, this.vehicleForm.value)
+          .updateVehicles(this.data._id, this.vehicleForm.value)
           .subscribe({
             next: (val: any) => {
               this._snackbar.openSnackBar(

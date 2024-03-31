@@ -43,7 +43,6 @@ export class AddStsDialogComponent {
     private _snackbar: SnackbarService
   ) {
     this.stsForm = this._fb.group({
-      id: '',
       name: ['', Validators.required],
       wardNumber: ['', Validators.required],
       capacity: ['', Validators.required],
@@ -56,8 +55,16 @@ export class AddStsDialogComponent {
   }
   onFormSubmit() {
     if (this.stsForm.valid) {
+      const formData = this.stsForm.value;
+      const formattedData = {
+        name: formData.name,
+        wardNumber: Number(formData.wardNumber),
+        capacity: Number(formData.capacity),
+        gpsCoordinates: [Number(formData.gpsLat), Number(formData.gpsLong)],
+      };
+
       if (this.data) {
-        this._stsService.updateSts(this.data.id, this.stsForm.value).subscribe({
+        this._stsService.updateSts(this.data._id, formattedData).subscribe({
           next: (val: any) => {
             this._snackbar.openSnackBar('sts Updated successfully', 'done');
             this._dialogRef.close(true);
@@ -67,7 +74,7 @@ export class AddStsDialogComponent {
           },
         });
       } else {
-        this._stsService.addSts(this.stsForm.value).subscribe({
+        this._stsService.addSts(formattedData).subscribe({
           next: (val: any) => {
             this._snackbar.openSnackBar('STS added successfully', 'done');
             this._dialogRef.close(true);

@@ -3,7 +3,13 @@
 <ul>
   <li *ngFor="let landfill of landfills">
     <!-- <button>{{ landfill.name }} - {{ landfill.location }}</button> -->
-    <button mat-raised-button color="primary">{{ landfill.title }}</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="updateRoles(landfill._id)"
+    >
+      {{ landfill.LandfillName }}
+    </button>
   </li>
 </ul>
 <button mat-button (click)="closeDialog()">Close</button>

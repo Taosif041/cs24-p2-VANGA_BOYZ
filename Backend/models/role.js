@@ -4,6 +4,7 @@ const PermissionSchema = require("./permission").schema;
 const RoleSchema = new mongoose.Schema({
   roleName: {
     type: String,
+    null: true
   },
   permissions: [PermissionSchema],
 });

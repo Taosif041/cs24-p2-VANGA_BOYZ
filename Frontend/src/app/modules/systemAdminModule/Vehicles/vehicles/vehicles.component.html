@@ -38,14 +38,21 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Fuel Cost Fully Loaded
         </th>
-        <td mat-cell *matCellDef="let row">{{ row.fuelCostFullyLoaded }}</td>
+        <td mat-cell *matCellDef="let row">{{ row.fuelCostPerKmLoaded }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fuelCostUnloaded">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           Fuel Cost Unloaded
         </th>
-        <td mat-cell *matCellDef="let row">{{ row.fuelCostUnloaded }}</td>
+        <td mat-cell *matCellDef="let row">{{ row.fuelCostPerKmUnloaded }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="assignedSts">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Assigned STS</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.sts ? row.sts.name : "N/A" }}
+        </td>
       </ng-container>
 
       <!-- Fruit Column -->
@@ -55,14 +62,18 @@
           <button mat-icon-button color="primary" (click)="openEditForm(row)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="deleteVehicles(row.id)">
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteVehicles(row._id)"
+          >
             <mat-icon>delete</mat-icon>
           </button>
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon>group_add</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDilogForm()">
+            <button mat-menu-item (click)="openStsListDialog(row._id)">
               <span>Assign to STS</span>
             </button>
           </mat-menu>

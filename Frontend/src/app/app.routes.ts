@@ -12,6 +12,7 @@ import { ChangePasswordComponent } from './modules/loginModule/change-password/c
 import { LandfillComponent } from './modules/systemAdminModule/landfill/landfill/landfill.component';
 import { DashboardComponent } from './modules/authenticatedUserModule/dashboard/dashboard.component';
 import { RecoverPasswordComponent } from './modules/loginModule/recover-password/recover-password.component';
+import { UnassignedComponent } from './modules/systemAdminModule/Users/unassigned/unassigned.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -30,4 +31,6 @@ export const routes: Routes = [
   { path: 'newuser', component: CreateNewUserComponent },
   { path: 'addsts', component: AddSTSComponent },
   { path: 'landfill', component: LandfillComponent },
+
+  { path: 'unassigned', component: UnassignedComponent },
 ];

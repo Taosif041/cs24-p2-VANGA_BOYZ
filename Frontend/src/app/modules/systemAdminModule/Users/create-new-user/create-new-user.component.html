@@ -58,13 +58,13 @@
             <mat-icon>group_add</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDilogForm()">
+            <button mat-menu-item (click)="openUnassignDialog(row._id)">
               <span>unassigned</span>
             </button>
-            <button mat-menu-item (click)="openStsListDialog()">
+            <button mat-menu-item (click)="openStsListDialog(row._id)">
               <span>STS Manager</span>
             </button>
-            <button mat-menu-item (click)="openLandfillListDialog()">
+            <button mat-menu-item (click)="openLandfillListDialog(row._id)">
               <span>Landfill Manager</span>
             </button>
           </mat-menu>
