@@ -7,10 +7,15 @@ router.get('/', stsController.getAllSTSs);
 router.get('/:stsId', stsController.getSTS);
 router.put('/:stsId', stsController.updateSTS);
 router.delete('/:stsId', stsController.deleteSTS);
-router.get('/sts/:stsId/vehicles', stsController.getVehicles);
-router.post('/:stsId/manager', stsController.assignManagerToSTS);
-router.post('/:stsId/truck', stsController.assignTruckToSTS);
-//router.post('/:stsId/entry', stsController.addVehicleEntry);
-//router.post('/:stsId/recieve', stsController.recieveVehicleEntry);
+router.post('/:stsId/managers', stsController.addManager);
+router.delete('/:stsId/managers', stsController.deleteManager);
+router.get('/:stsId/managers', stsController.getManagers);
+router.get('/:stsId/vehicles', stsController.getVehicles);
+
+// Add a vehicle
+router.post('/:stsId/vehicles', stsController.addVehicle);
+
+// Delete a vehicle
+router.delete('/:stsId/vehicles/:vehicleId', stsController.deleteVehicle);
 
 module.exports = router;

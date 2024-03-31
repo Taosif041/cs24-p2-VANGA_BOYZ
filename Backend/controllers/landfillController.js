@@ -1,23 +1,19 @@
-const LandfillManager = require("../models/landfillManager"); // Import the LandfillManager model
-const User = require("../models/user"); // Import the User model
-const Landfill = require("../models/landfill"); // Import the Landfill model
-const landfillValidator = require("../validators/landfill"); // Import the landfill validator
+const LandfillManager = require("../models/landfillManager");
+const User = require("../models/user");
+const Landfill = require("../models/landfill");
+const landfillValidator = require("../validators/landfill");
 
 exports.createLandfill = async (req, res) => {
   try {
-    // Validate the request data
     const { error } = landfillValidator.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    // Create a new landfill
     const newLandfill = new Landfill(req.body);
 
-    // Save the new landfill to the database
     const savedLandfill = await newLandfill.save();
 
-    // Return the saved landfill
     return res.status(201).json(savedLandfill);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -26,10 +22,8 @@ exports.createLandfill = async (req, res) => {
 
 exports.getAllLandfills = async (req, res) => {
   try {
-    // Retrieve all landfills from the database
     const landfills = await Landfill.find();
 
-    // Return the list of landfills
     return res.status(200).json(landfills);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -38,15 +32,12 @@ exports.getAllLandfills = async (req, res) => {
 
 exports.getLandfill = async (req, res) => {
   try {
-    // Retrieve the landfill with the given ID from the database
     const landfill = await Landfill.findById(req.params.landfillId);
 
-    // If the landfill is not found, return a 404 status code
     if (!landfill) {
       return res.status(404).json({ message: "Landfill not found" });
     }
 
-    // Return the landfill
     return res.status(200).json(landfill);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -55,25 +46,21 @@ exports.getLandfill = async (req, res) => {
 
 exports.updateLandfill = async (req, res) => {
   try {
-    // Validate the request data
     const { error } = landfillValidator.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    // Update the landfill with the given ID
     const updatedLandfill = await Landfill.findByIdAndUpdate(
       req.params.landfillId,
       req.body,
-      { new: true } // This option returns the updated document
+      { new: true }
     );
 
-    // If the landfill is not found, return a 404 status code
     if (!updatedLandfill) {
       return res.status(404).json({ message: "Landfill not found" });
     }
 
-    // Return the updated landfill
     return res.status(200).json(updatedLandfill);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -82,94 +69,130 @@ exports.updateLandfill = async (req, res) => {
 
 exports.deleteLandfill = async (req, res) => {
   try {
-    // Delete the landfill with the given ID
-    const deletedLandfill = await Landfill.findByIdAndDelete(
-      req.params.landfillId
-    );
+    const deletedLandfill = await Landfill.findByIdAndDelete(req.params.landfillId);
 
-    // If the landfill is not found, return a 404 status code
     if (!deletedLandfill) {
       return res.status(404).json({ message: "Landfill not found" });
     }
 
-    // Delete all associated landfill managers
-    const deletedManagers = await LandfillManager.deleteMany({
-      landfillId: req.params.landfillId,
-    });
+    // First find the managers
+    const managers = await LandfillManager.find({ landfillId: req.params.landfillId });
 
-    // Update the User model for the associated managers
+    // Then delete them
+    await LandfillManager.deleteMany({ landfillId: req.params.landfillId });
+
     await User.updateMany(
-      { _id: { $in: deletedManagers.map((manager) => manager.userID) } },
-      { $set: { sts: {} } }
+      { _id: { $in: managers.map((manager) => manager.userID) } },
+      { $set: { landfill: null } }
     );
 
-    // Return a success message
     return res
       .status(200)
       .json({
-        message: "Landfill and associated managers deleted successfully",
+        message: "Landfill deleted successfully and associated managers have been unassigned.",
       });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
 
-exports.assignManagers = async (req, res) => {
-  const { userIDs } = req.body;
-
-  // Check all userIDs exist
-  const users = await User.find({ _id: { $in: userIDs } });
-  if (users.length !== userIDs.length) {
-    return res.status(400).json({ message: "Some userIDs do not exist" });
-  }
-
+exports.getManagers = async (req, res) => {
   try {
-    const landfill = await Landfill.findById(req.params.landfillId);
-    if (landfill == null) {
-      return res.status(404).json({ message: "Cannot find Landfill" });
+    const landfill = await Landfill.findById(req.params.landfillId).populate({
+      path: 'managers',
+      select: '-password'
+    });
+    if (!landfill) return res.status(404).json({ message: 'Cannot find landfill' });
+
+    res.status(200).json(landfill.managers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+exports.addManager = async (req, res) => {
+  try {
+    const { managerId } = req.body;
+    if (!managerId) throw new Error('Manager is required');
+
+    const manager = await User.findById(managerId);
+    if (!manager) return res.status(400).json({ message: "Manager not found" });
+
+    let landfill = await Landfill.findById(req.params.landfillId);
+    if (!landfill) return res.status(404).json({ message: 'Cannot find landfill' });
+
+    if (manager.sts || manager.landfill) {
+      if (manager.sts) {
+        const sts = await STS.findById(manager.sts._id);
+        if (sts) {
+          sts.managers.pull(manager._id);
+          await sts.save();
+          await STSManager.deleteOne({ userID: manager._id, stsId: sts._id });
+        }
+        manager.sts = null;
+      }
+
+      if (manager.landfill) {
+        const otherLandfill = await Landfill.findById(manager.landfill._id);
+        if (otherLandfill) {
+          otherLandfill.managers.pull(manager._id);
+          await otherLandfill.save();
+          await LandfillManager.deleteOne({ userID: manager._id, landfillId: otherLandfill._id });
+        }
+        manager.landfill = null;
+      }
+
+      await manager.save();
     }
 
-    // Create a copy of the Landfill object without the managers field
-    const landfillForUser = { ...landfill._doc, managers: undefined };
+    landfill.managers.push(manager._id);
+    await landfill.save();
 
-    // Find out who are newly assigned and who are deleted
-    const newManagers = userIDs.filter((id) => !landfill.managers.includes(id));
-    const deletedManagers = landfill.managers.filter(
-      (id) => !userIDs.includes(id)
-    );
+    const landfillManager = new LandfillManager({ userID: manager._id, landfillId: landfill._id });
+    await landfillManager.save();
 
-    // Add new managers to LandfillManager model and update User model
-    const addManagerPromises = newManagers.map(async (id) => {
-      await LandfillManager.deleteOne({ userID: id });
-      const newLandfillManager = new LandfillManager({
-        userID: id,
-        landfillId: landfill._id,
-      });
-      await newLandfillManager.save();
-      return User.updateOne({ _id: id }, { landfill: landfillForUser });
-    });
+    // Remove the managers field from the landfill object
+    const { managers, ...landfillWithoutManagers } = landfill._doc;
+    manager.landfill = landfillWithoutManagers;
+    await manager.save();
 
-    // Remove deleted managers from LandfillManager model and update User model
-    const deleteManagerPromises = deletedManagers.map(async (id) => {
-      await LandfillManager.deleteOne({ userID: id, landfillId: landfill._id });
-      return User.updateOne({ _id: id }, { landfill: null });
-    });
-
-    // Wait for all promises to complete
-    await Promise.all([...addManagerPromises, ...deleteManagerPromises]);
-
-    // Assign userIDs to the managers array
-    landfill.managers = userIDs;
-    const updatedLandfill = await landfill.save();
-
-    res.status(200).json(updatedLandfill);
+    res.status(200).json(landfill);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
+exports.deleteManager = async (req, res) => {
+  try {
+    const { managerId } = req.body;
+    if (!managerId) throw new Error('Manager is required');
+
+    const manager = await User.findById(managerId);
+    if (!manager) return res.status(400).json({ message: "Manager not found" });
+
+    const landfill = await Landfill.findById(req.params.landfillId);
+    if (!landfill) return res.status(404).json({ message: 'Cannot find landfill' });
+
+    if (manager.landfill._id.toString() !== landfill._id.toString()) {
+      return res.status(400).json({ message: 'Manager is not assigned to this landfill' });
+    }
+
+    landfill.managers.pull(manager._id);
+    await landfill.save();
+
+    await LandfillManager.deleteOne({ userID: manager._id, landfillId: landfill._id });
+
+    manager.landfill = null;
+    await manager.save();
+
+    res.status(200).json(landfill);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.addEntry = async (req, res) => {
   // TODO: Implement the logic for adding an entry of truck dumping at the landfill site
 };
+
 exports.receiveTruck = async (req, res) => {
   // TODO: Implement the logic for receiving a truck at a landfill site
 };

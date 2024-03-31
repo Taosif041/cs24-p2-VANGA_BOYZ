@@ -7,6 +7,7 @@ const rbacRoutes = require('./routes/rbacRoutes'); // Import rbacRoutes
 const vehicleRoutes = require('./routes/vehicleRoutes'); // Import vehicleRoutes
 const stsRoutes = require('./routes/stsRoutes'); // Import stsRoutes
 const landfillRoutes = require('./routes/landfillRoutes'); // Import landfillRoutes
+const transferWasteRouter = require('./routes/transferRoutes');
 const connectDB = require('./config/db');
 const authMiddleware = require('./middlewares/authMiddleware');
 const cors = require('cors');
@@ -34,8 +35,9 @@ app.use('/rbac',authMiddleware, rbacRoutes); // Use rbacRoutes
 app.use('/vehicles',authMiddleware, vehicleRoutes); // Use vehicleRoutes
 app.use('/sts',authMiddleware,stsRoutes); // Use stsRoutes
 app.use('/landfill',authMiddleware,landfillRoutes); // Use landfillRoutes
-app.use('/auth', authRoutes); // Use authRoutes
+app.use('/transfer-waste',authMiddleware, transferWasteRouter);
 
+app.use('/auth', authRoutes); // Use authRoutes
 // Middleware for handling undefined routes
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not defined' });

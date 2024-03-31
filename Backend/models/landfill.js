@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const LandfillSchema = new mongoose.Schema({
+const LandfillSchema = new Schema({
   LandfillName: {
     type: String,
     required: true,
@@ -18,11 +19,11 @@ const LandfillSchema = new mongoose.Schema({
     type: [Number],
     required: true
   },
-  managers: {
-    type: [String],
+  managers: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     default: []
-    
-  }
+  }]
 });
 
 module.exports = mongoose.model('Landfill', LandfillSchema);

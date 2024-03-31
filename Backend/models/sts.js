@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const STSSchema = new mongoose.Schema({
-  
   name: {
     type: String,
     required: true,
@@ -19,12 +18,14 @@ const STSSchema = new mongoose.Schema({
     type: [Number], // Change the type to an array of Numbers
     required: true
   },
-  managers: {
-    type: [String]
-  },
-  assignedTrucks: {
-    type: [String]
-  }
+  managers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  assignedTrucks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vehicle'
+  }]
 });
 
 const STS = mongoose.model('STS', STSSchema);
