@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
     DialogRef.afterClosed().subscribe({
       next: (val) => {
         if (val) {
+          this.getUserData();
         }
       },
       error: console.log,

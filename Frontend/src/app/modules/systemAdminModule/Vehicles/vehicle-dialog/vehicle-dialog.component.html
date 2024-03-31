@@ -3,8 +3,8 @@
     <h1>{{ data ? "Update Vehicle" : "Create New Vehicle" }}</h1>
   </div>
 
-  <form [formGroup]="vehicleForm" (ngSubmit)="onFormSubmit()">
-    <div mat-dialog-content class="content">
+  <form [formGroup]="vehicleForm" (ngSubmit)="onFormSubmit()" class="content">
+    <div mat-dialog-content>
       <div class="row">
         <mat-form-field appearance="outline">
           <mat-label>Vehicle Registration Number</mat-label>

@@ -117,12 +117,12 @@ export class CreateNewUserComponent implements OnInit {
 
   openLandfillListDialog(): void {
     const dialogRef = this.dialog.open(LandfillListDialogComponent, {
-      width: '500px',
+      width: '600px',
     });
   }
   openStsListDialog(): void {
     const dialogRef = this.dialog.open(StsListDialogComponent, {
-      width: '500px',
+      width: '600px',
     });
   }
 }
