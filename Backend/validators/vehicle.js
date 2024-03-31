@@ -8,7 +8,7 @@ const VehicleValidator = Joi.object({
   fuelCostPerKmUnloaded: Joi.number().required(),
   stsID: Joi.string().optional(),
   status: Joi.string().valid('in sts', 'going to landfill', 'in landfill', 'return to sts')
-  // Additional attributes as necessary
+  
 });
 
 module.exports = VehicleValidator;

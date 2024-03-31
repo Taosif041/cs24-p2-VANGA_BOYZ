@@ -19,9 +19,10 @@ async function addVehicle(req, res) {
 
 
 // Controller function for retrieving all vehicles
+
 async function getVehicles(req, res) {
   try {
-    const vehicles = await Vehicle.find({}, { usage: 0 });
+    const vehicles = await Vehicle.find({}, { usage: 0 }).populate('stsId');
     res.status(200).json(vehicles);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -31,7 +32,7 @@ async function getVehicles(req, res) {
 // Controller function for retrieving a specific vehicle
 async function getVehicle(req, res) {
   try {
-    const vehicle = await Vehicle.findById(req.params.vehicleId).select('-usage');
+    const vehicle = await Vehicle.findById(req.params.vehicleId).select('-usage').populate('stsId');
     if (vehicle == null) {
       return res.status(404).json({ message: 'Cannot find vehicle' });
     }
