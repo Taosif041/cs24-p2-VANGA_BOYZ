@@ -4,7 +4,9 @@ const Vehicle = require("../models/vehicle"); // Assuming you have a Vehicle mod
 const STS = require("../models/sts"); // Assuming you have an STS model
 const Landfill = require("../models/landfill"); // Assuming you have a Landfill model
 const wasteTransferLogValidation = require("../validators/wasteLogs");
-const vehicle = require("../models/vehicle");
+
+const stsManager = require("../models/stsManager");
+const landfillManager = require("../models/landfillManager");
 
 exports.arrivalAtSTS = async (req, res) => {
   try {
@@ -196,16 +198,14 @@ exports.getAllWasteLogs = async (req, res) => {
         if (wasteLog.landfill) {
           delete wasteLog.landfill.managers;
         }
-        wasteLog.stsManager = stsManager ? stsManager.toJSON() : null;
-        delete wasteLog.stsManagerId;
-
+      
         return wasteLog;
       })
     );
 
     res.status(200).json(wasteLogs);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message,hi:"hi" });
   }
 };
 
