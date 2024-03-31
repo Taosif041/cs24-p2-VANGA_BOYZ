@@ -64,4 +64,8 @@ export class DashboardComponent implements OnInit {
       error: console.log,
     });
   }
+  navigateToTransport(): void {
+    // Navigate to the change password page
+    this.router.navigate(['/transfer']);
+  }
 }

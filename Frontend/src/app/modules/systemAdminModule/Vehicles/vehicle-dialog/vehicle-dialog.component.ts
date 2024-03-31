@@ -57,7 +57,7 @@ export class VehicleDialogComponent {
     if (this.vehicleForm.valid) {
       if (this.data) {
         this._vehicleService
-          .updateVehicles(this.data._id, this.vehicleForm.value)
+          .updateVehicle(this.data._id, this.vehicleForm.value)
           .subscribe({
             next: (val: any) => {
               this._snackbar.openSnackBar(
@@ -71,7 +71,7 @@ export class VehicleDialogComponent {
             },
           });
       } else {
-        this._vehicleService.addVehicles(this.vehicleForm.value).subscribe({
+        this._vehicleService.addVehicle(this.vehicleForm.value).subscribe({
           next: (val: any) => {
             this._snackbar.openSnackBar('vehicle added successfully', 'done');
             this._dialogRef.close(true);

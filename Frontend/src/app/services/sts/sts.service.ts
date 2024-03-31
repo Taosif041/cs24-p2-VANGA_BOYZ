@@ -2,53 +2,63 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../authentiction/authentiction.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StsService {
-  private url = 'http://localhost:3000/sts';
-  // private uul = 'https://jsonplaceholder.typicode.com/posts';
+  private apiUrl = environment.apiUrl;
 
   constructor(
-    private _http: HttpClient,
+    private http: HttpClient,
     private authService: AuthenticationService
   ) {}
+
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAuthToken();
     return new HttpHeaders().set('Authorization', token ? token : '');
   }
 
   getStsList(): Observable<any> {
-    return this._http.get(this.url, {
+    const url = `${this.apiUrl}/sts`; // Use apiUrl for base URL
+    return this.http.get(url, {
       headers: this.getHeaders(),
     });
   }
+
   getStsById(id: string): Observable<any> {
-    return this._http.get(`http://localhost:3000/sts/${id}`, {
+    const url = `${this.apiUrl}/sts/${id}`; // Use apiUrl for base URL
+    return this.http.get(url, {
       headers: this.getHeaders(),
     });
   }
 
   addSts(data: any): Observable<any> {
-    return this._http.post(this.url, data, {
-      headers: this.getHeaders(),
-    });
-  }
-  deleteSts(id: string): Observable<any> {
-    return this._http.delete(`http://localhost:3000/sts/${id}`, {
-      headers: this.getHeaders(),
-    });
-  }
-  updateSts(id: string, data: any): Observable<any> {
-    return this._http.put(`http://localhost:3000/sts/${id}`, data, {
+    const url = `${this.apiUrl}/sts`; // Use apiUrl for base URL
+    return this.http.post(url, data, {
       headers: this.getHeaders(),
     });
   }
 
-  addManagerToSts(stsId: string, managerId: string): Observable<any> {
-    const data = { managerId };
-    return this._http.post(`${this.url}/${stsId}/managers`, data, {
+  deleteSts(id: string): Observable<any> {
+    const url = `${this.apiUrl}/sts/${id}`; // Use apiUrl for base URL
+    return this.http.delete(url, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  updateSts(id: string, data: any): Observable<any> {
+    const url = `${this.apiUrl}/sts/${id}`; // Use apiUrl for base URL
+    return this.http.put(url, data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  addManagerToSts(stsId: string, userId: string): Observable<any> {
+    const url = `${this.apiUrl}/sts/${stsId}/managers`; // Use apiUrl for base URL
+    const data = { userId };
+    return this.http.post(url, data, {
       headers: this.getHeaders(),
     });
   }
