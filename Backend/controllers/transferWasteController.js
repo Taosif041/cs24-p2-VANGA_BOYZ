@@ -89,7 +89,7 @@ exports.departureFromSTSToLandfill = async (req, res) => {
 
     wasteLog = await wasteLog.save();
 
-   // wasteLog = await wasteLog.populate('vehicleId stsId landfillId stsManagerId').execPopulate();
+    // wasteLog = await wasteLog.populate('vehicleId stsId landfillId stsManagerId').execPopulate();
 
     wasteLog = wasteLog.toJSON();
     wasteLog.vehicle = vehicle.toJSON();
@@ -102,7 +102,7 @@ exports.departureFromSTSToLandfill = async (req, res) => {
     wasteLog.landfill = landfill.toJSON();
     delete wasteLog.landfillId;
     delete wasteLog.landfill.managers;
-   
+
     delete wasteLog.stsManagerId;
 
     res.status(201).json(wasteLog);
@@ -171,26 +171,32 @@ exports.getAllWasteLogs = async (req, res) => {
 
     let wasteLogs = await WasteTransferLog.find(query);
 
-    // Populate the referenced fields
     wasteLogs = await Promise.all(
       wasteLogs.map(async (wasteLog) => {
-        wasteLog = await wasteLog
-          .populate("vehicleId stsId landfillId stsManagerId")
-          .execPopulate();
-
+        // Fetch related documents
+        const vehicle = await Vehicle.findById(wasteLog.vehicleId);
+        const sts = await STS.findById(wasteLog.stsId);
+        const landfill = await Landfill.findById(wasteLog.landfillId);
+        
         // Transform the document
         wasteLog = wasteLog.toJSON();
-        wasteLog.vehicle = wasteLog.vehicleId;
+        wasteLog.vehicle = vehicle ? vehicle.toJSON() : null;
         delete wasteLog.vehicleId;
-        delete wasteLog.vehicle.usage;
-        wasteLog.sts = wasteLog.stsId;
+        if (wasteLog.vehicle) {
+          delete wasteLog.vehicle.usage;
+        }
+        wasteLog.sts = sts ? sts.toJSON() : null;
         delete wasteLog.stsId;
-        delete wasteLog.sts.managers;
-        delete wasteLog.sts.assignedTrucks;
-        wasteLog.landfill = wasteLog.landfillId;
+        if (wasteLog.sts) {
+          delete wasteLog.sts.managers;
+          delete wasteLog.sts.assignedTrucks;
+        }
+        wasteLog.landfill = landfill ? landfill.toJSON() : null;
         delete wasteLog.landfillId;
-        delete wasteLog.landfill.managers;
-        wasteLog.stsManager = wasteLog.stsManagerId;
+        if (wasteLog.landfill) {
+          delete wasteLog.landfill.managers;
+        }
+        wasteLog.stsManager = stsManager ? stsManager.toJSON() : null;
         delete wasteLog.stsManagerId;
 
         return wasteLog;
@@ -203,45 +209,96 @@ exports.getAllWasteLogs = async (req, res) => {
   }
 };
 
+
 exports.generateSlip = async (req, res) => {
   try {
     const { wasteLogId } = req.body;
 
     if (!wasteLogId) {
-      return res.status(400).json({ message: 'wasteLogId is required' });
+      return res.status(400).json({ message: "wasteLogId is required" });
     }
 
     // Fetch the wasteLog from the database using the wasteLogId
-    const wasteLog = await WasteTransferLog.findById(wasteLogId)
-      .populate('vehicleId', 'registrationNumber type capacity')
-      .populate('stsId', 'name wardNumber gpsCoordinates')
-      .populate('landfillId', 'LandfillName gpsCoordinates');
+    const wasteLog = await WasteTransferLog.findById(wasteLogId);
 
     if (!wasteLog) {
-      return res.status(404).json({ message: 'Waste log not found' });
+      return res.status(404).json({ message: "Waste log not found" });
     }
+
+    // Fetch related documents
+    const vehicle = await Vehicle.findById(wasteLog.vehicleId).select('registrationNumber type capacity');
+    const sts = await STS.findById(wasteLog.stsId).select('name wardNumber gpsCoordinates');
+    const landfill = await Landfill.findById(wasteLog.landfillId).select('LandfillName gpsCoordinates');
 
     // Generate the slip
     const slip = {
       landfill: {
-        LandfillName: wasteLog.landfillId.LandfillName,
-        gpsCoordinates: wasteLog.landfillId.gpsCoordinates
+        LandfillName: landfill ? landfill.LandfillName : null,
+        gpsCoordinates: landfill ? landfill.gpsCoordinates : null,
       },
       sts: {
-        name: wasteLog.stsId.name,
-        wardNumber: wasteLog.stsId.wardNumber,
-        gpsCoordinates: wasteLog.stsId.gpsCoordinates
+        name: sts ? sts.name : null,
+        wardNumber: sts ? sts.wardNumber : null,
+        gpsCoordinates: sts ? sts.gpsCoordinates : null,
       },
       vehicle: {
-        registrationNumber: wasteLog.vehicleId.registrationNumber,
-        type: wasteLog.vehicleId.type,
-        capacity: wasteLog.vehicleId.capacity
+        registrationNumber: vehicle ? vehicle.registrationNumber : null,
+        type: vehicle ? vehicle.type : null,
+        capacity: vehicle ? vehicle.capacity : null,
       },
       weightOfWaste: wasteLog.weightOfWaste,
       status: wasteLog.status,
       distance: wasteLog.distance,
       date: wasteLog.date,
-      oilConsumed: wasteLog.oilConsumed
+      oilConsumed: wasteLog.oilConsumed,
+    };
+
+    res.status(200).json({ slip });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+exports.generateSlip = async (req, res) => {
+  try {
+    const { wasteLogId } = req.body;
+
+    if (!wasteLogId) {
+      return res.status(400).json({ message: "wasteLogId is required" });
+    }
+
+    // Fetch the wasteLog from the database using the wasteLogId
+    const wasteLog = await WasteTransferLog.findById(wasteLogId);
+
+    if (!wasteLog) {
+      return res.status(404).json({ message: "Waste log not found" });
+    }
+
+    // Fetch related documents
+    const vehicle = await Vehicle.findById(wasteLog.vehicleId).select('registrationNumber type capacity');
+    const sts = await STS.findById(wasteLog.stsId).select('name wardNumber gpsCoordinates');
+    const landfill = await Landfill.findById(wasteLog.landfillId).select('LandfillName gpsCoordinates');
+
+    // Generate the slip
+    const slip = {
+      landfill: {
+        LandfillName: landfill ? landfill.LandfillName : null,
+        gpsCoordinates: landfill ? landfill.gpsCoordinates : null,
+      },
+      sts: {
+        name: sts ? sts.name : null,
+        wardNumber: sts ? sts.wardNumber : null,
+        gpsCoordinates: sts ? sts.gpsCoordinates : null,
+      },
+      vehicle: {
+        registrationNumber: vehicle ? vehicle.registrationNumber : null,
+        type: vehicle ? vehicle.type : null,
+        capacity: vehicle ? vehicle.capacity : null,
+      },
+      weightOfWaste: wasteLog.weightOfWaste,
+      status: wasteLog.status,
+      distance: wasteLog.distance,
+      date: wasteLog.date,
+      oilConsumed: wasteLog.oilConsumed,
     };
 
     res.status(200).json({ slip });
