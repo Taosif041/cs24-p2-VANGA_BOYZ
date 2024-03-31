@@ -17,7 +17,7 @@ export class AuthenticationService {
 
   login(email: string, password: string): Observable<any> {
     return this.http
-      .post<any>(`${this.apiUrl}`, { email, password }) // Ensure the endpoint is correct
+      .post<any>(`${this.apiUrl}/auth/login`, { email, password }) // Ensure the endpoint is correct
       .pipe(
         map((response) => {
           // Store token securely or consider other storage mechanisms
