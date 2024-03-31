@@ -3,6 +3,8 @@ const STSValidator = require("../validators/sts");
 const User = require("../models/user");
 const STSManager = require("../models/stsManager");
 const Vehicle = require("../models/vehicle");
+const LandfillManager = require("../models/landfillManager");
+const Landfill = require("../models/landfill");
 
 exports.createSTS = async (req, res) => {
   const { error } = STSValidator.validate(req.body);
@@ -55,7 +57,7 @@ exports.updateSTS = async (req, res) => {
   }
 };
 
-exports.deleteSTS = async (req, res) => {
+exports.deleteSTS = async (req, res) => { //edit needed
   try {
     const sts = await STS.findById(req.params.stsId);
     if (sts == null) {
@@ -70,7 +72,7 @@ exports.deleteSTS = async (req, res) => {
     const updatePromises = stsManagers.map(async (stsManager) => {
       const user = await User.findById(stsManager.userID);
       if (user.sts && user.sts._id.toString() === sts._id.toString()) {
-        user.sts = {};
+        user.sts = null;
         return user.save();
       }
     });
@@ -84,100 +86,123 @@ exports.deleteSTS = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
-
-
-exports.assignManagerToSTS = async (req, res) => {
-  const { userIDs } = req.body;
-
-  // Check all userIDs exist
-  const users = await User.find({ _id: { $in: userIDs } });
-  if (users.length !== userIDs.length) {
-    return res.status(400).json({ message: 'Some userIDs do not exist' });
-  }
-
+exports.getManagers = async (req, res) => {
   try {
     const sts = await STS.findById(req.params.stsId);
-    if (sts == null) {
-      return res.status(404).json({ message: 'Cannot find STS' });
-    }
+    if (!sts) return res.status(404).json({ message: 'Cannot find STS' });
 
-    // Create a copy of the STS object without the managers and assignedTrucks fields
-    const stsForUser = { ...sts._doc, managers: undefined, assignedTrucks: undefined };
+    const managers = await User.find({ _id: { $in: sts.managers } }).select('-password');
 
-    // Find out who are newly assigned and who are deleted
-    const newManagers = userIDs.filter(id => !sts.managers.includes(id));
-    const deletedManagers = sts.managers.filter(id => !userIDs.includes(id));
-
-    // Add new managers to STSManager model and update User model
-    const addManagerPromises = newManagers.map(async id => {
-      await STSManager.deleteOne({ userID: id });
-      const newSTSManager = new STSManager({ userID: id, stsId: sts._id });
-      await newSTSManager.save();
-      return User.updateOne({ _id: id }, { sts: stsForUser });
-    });
-
-    // Remove deleted managers from STSManager model and update User model
-    const deleteManagerPromises = deletedManagers.map(async id => {
-      await STSManager.deleteOne({ userID: id, stsId: sts._id });
-      return User.updateOne({ _id: id }, { sts: null });
-    });
-
-    // Wait for all promises to complete
-    await Promise.all([...addManagerPromises, ...deleteManagerPromises]);
-
-    // Assign userIDs to the managers array
-    sts.managers = userIDs;
-    const updatedSTS = await sts.save();
-
-    res.status(200).json(updatedSTS);
+    res.status(200).json(managers);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
 
-exports.assignTruckToSTS = async (req, res) => {
-  const { vehicleIDs } = req.body;
 
-  // Check if all vehicleIDs exist
-  const vehicles = await Vehicle.find({ _id: { $in: vehicleIDs } });
-  if (vehicles.length !== vehicleIDs.length) {
-    return res.status(400).json({ message: "Some vehicleIDs do not exist" });
-  }
-
+exports.addManager = async (req, res) => {
   try {
+    const { userId } = req.body;
+    if (!userId) throw new Error('User is required');
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "User not found" });
+    
     const sts = await STS.findById(req.params.stsId);
-    if (sts == null) {
-      return res.status(404).json({ message: "Cannot find STS" });
+    if (!sts) return res.status(404).json({ message: 'Cannot find STS' });
+    // Find any existing STSManager for the user
+    const existingSTSManager = await STSManager.findOne({ userID: userId });
+
+    if (existingSTSManager) {
+      // If found, remove the user from the previous STS's managers list
+      const previousSTS = await STS.findById(existingSTSManager.stsId);
+      if (previousSTS) {
+        const index = previousSTS.managers.indexOf(userId);
+        if (index > -1) {
+          previousSTS.managers.splice(index, 1);
+          await previousSTS.save();
+        }
+      }
+
+      // Delete the existing STSManager
+      await STSManager.findByIdAndDelete(existingSTSManager._id);
     }
 
-    // Find out who are newly assigned and who are deleted
-    const newVehicles = vehicleIDs.filter((id) => !sts.vehicles.includes(id));
-    const deletedVehicles = sts.vehicles.filter(
-      (id) => !vehicleIDs.includes(id)
-    );
+    // Find any existing LandfillManager for the user
+    const existingLandfillManager = await LandfillManager.findOne({ userID: userId });
 
-    // Add new vehicles to STS
-    const addVehiclePromises = newVehicles.map(async (vehicleID) => {
-      return Vehicle.updateOne({ _id: vehicleID }, { stsID: sts._id });
-    });
+    if (existingLandfillManager) {
+      // If found, remove the user from the previous landfill's managers list
+      const previousLandfill = await Landfill.findById(existingLandfillManager.landfillId);
+      if (previousLandfill) {
+        const index = previousLandfill.managers.indexOf(userId);
+        if (index > -1) {
+          previousLandfill.managers.splice(index, 1);
+          await previousLandfill.save();
+        }
+      }
 
-    // Remove deleted vehicles from STS
-    const deleteVehiclePromises = deletedVehicles.map(async (vehicleID) => {
-      return Vehicle.updateOne({ _id: vehicleID }, { stsID: null });
-    });
+      // Delete the existing LandfillManager
+      await LandfillManager.findByIdAndDelete(existingLandfillManager._id);
+    }
 
-    // Wait for all promises to complete
-    await Promise.all([...addVehiclePromises, ...deleteVehiclePromises]);
 
-    // Assign vehicleIDs to the vehicles array
-    sts.vehicles = vehicleIDs;
-    const updatedSTS = await sts.save();
+    // Add the user to the new STS's managers list
+    sts.managers.push(user._id);
+    await sts.save();
 
-    res.status(200).json(updatedSTS);
+    // Create a new STSManager for the user and the new STS
+    const newSTSManager = new STSManager({ userID: userId, stsId: sts._id });
+    await newSTSManager.save();
+
+    // Update the sts field in the User model without the manager and assignedTruck fields
+    const stsForUser = { ...sts._doc };
+    delete stsForUser.managers;
+    delete stsForUser.assignedTrucks;
+    user.sts = stsForUser;
+    user.landfill = null;
+    await user.save();
+
+    res.status(200).json(sts);
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };
+exports.deleteManager = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) throw new Error('User ID is required');
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    const sts = await STS.findById(req.params.stsId);
+    if (!sts) return res.status(404).json({ message: 'Cannot find STS' });
+
+    const index = sts.managers.indexOf(user._id);
+    if (index > -1) {
+      sts.managers.splice(index, 1);
+      await sts.save();
+    }
+
+    // Find the STSManager for the user and the STS
+    const stsManager = await STSManager.findOne({ userID: userId, stsId: sts._id });
+
+    if (stsManager) {
+      // If found, delete the STSManager
+      await STSManager.findByIdAndDelete(stsManager._id);
+    }
+
+    // Clear the sts field in the User model
+    user.sts = null;
+    await user.save();
+
+    res.status(200).json(sts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 exports.getVehicles = async (req, res) => {
   try {
@@ -219,6 +244,78 @@ exports.getVehicles = async (req, res) => {
   }
 };
 
+exports.addVehicle = async (req, res) => {
+  try {
+    const { vehicleId } = req.body;
+    const newStsId = mongoose.Types.ObjectId(req.params.stsId);
+
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) return res.status(400).json({ message: "Vehicle not found" });
+    
+    const newSTS = await STS.findById(newStsId);
+    if (!newSTS) return res.status(404).json({ message: 'Cannot find STS' });
+    // If the vehicle is currently assigned to an STS
+    if (vehicle.stsID) {
+      // Find the current STS
+      const currentSTS = await STS.findById(vehicle.stsID);
+      if (currentSTS) {
+        // Remove the vehicle from the current STS's assignedTrucks array
+        const index = currentSTS.assignedTrucks.indexOf(vehicle._id);
+        if (index > -1) {
+          currentSTS.assignedTrucks.splice(index, 1);
+          await currentSTS.save();
+        }
+      }
+    }
+
+  
+
+    // Add the vehicle to the new STS's assignedTrucks array
+    newSTS.assignedTrucks.push(vehicle._id);
+    await newSTS.save();
+
+    // Update the stsID field of the vehicle
+    vehicle.stsID = newStsId;
+    await vehicle.save();
+
+    res.status(200).json(newSTS);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.deleteVehicle = async (req, res) => {
+  try {
+    const { vehicleId } = req.body;
+    const stsId = mongoose.Types.ObjectId(req.params.stsId);
+
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) return res.status(400).json({ message: "Vehicle not found" });
+
+    const sts = await STS.findById(stsId);
+    if (!sts) return res.status(404).json({ message: 'Cannot find STS' });
+
+    // Check if the vehicle is assigned to the STS
+    if (!sts.assignedTrucks.includes(vehicleId)) {
+      return res.status(400).json({ message: 'Vehicle is not assigned to this STS' });
+    }
+
+    // Remove the vehicle from the STS's vehicles list
+    const index = sts.assignedTrucks.indexOf(vehicle._id);
+    if (index > -1) {
+      sts.assignedTrucks.splice(index, 1);
+      await sts.save();
+    }
+
+    // Set the stsID field of the vehicle to null
+    vehicle.stsID = null;
+    await vehicle.save();
+
+    res.status(200).json(sts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 exports.addVehicleEntry = async (req, res) => {
   // TODO: Implement the function
 };

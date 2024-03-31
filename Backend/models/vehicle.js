@@ -25,13 +25,14 @@ const VehicleSchema = new mongoose.Schema({
     required: true,
   },
   stsID: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'STS',
+    default: null,
   },
   status: {
     type: String,
     enum: ["inSts", "goingToLandfill", "inLandfill", "returningToSts"],
-    default: "inSts",
+    default: null,
   },
   usage: [
     {
