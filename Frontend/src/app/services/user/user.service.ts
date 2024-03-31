@@ -2,42 +2,46 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../authentiction/authentiction.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private url = 'http://localhost:3000/user';
+  private apiUrl = environment.apiUrl;
 
   constructor(
-    private _http: HttpClient,
+    private http: HttpClient,
     private authService: AuthenticationService
   ) {}
+
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAuthToken();
     return new HttpHeaders().set('Authorization', token ? token : '');
   }
 
   getUserList(): Observable<any> {
-    return this._http.get(this.url, { headers: this.getHeaders() });
+    const url = `${this.apiUrl}/user`; // Use apiUrl for base URL
+    return this.http.get(url, { headers: this.getHeaders() });
   }
+
   getUserById(id: string): Observable<any> {
-    return this._http.get(`http://localhost:3000/user/${id}`, {
-      headers: this.getHeaders(),
-    });
+    const url = `${this.apiUrl}/user/${id}`; // Use apiUrl for base URL
+    return this.http.get(url, { headers: this.getHeaders() });
   }
 
   addUser(data: any): Observable<any> {
-    return this._http.post(this.url, data, { headers: this.getHeaders() });
+    const url = `${this.apiUrl}/user`; // Use apiUrl for base URL
+    return this.http.post(url, data, { headers: this.getHeaders() });
   }
+
   deleteUser(id: string): Observable<any> {
-    return this._http.delete(`http://localhost:3000/user/${id}`, {
-      headers: this.getHeaders(),
-    });
+    const url = `${this.apiUrl}/user/${id}`; // Use apiUrl for base URL
+    return this.http.delete(url, { headers: this.getHeaders() });
   }
+
   updateUser(id: string, data: any): Observable<any> {
-    return this._http.put(`http://localhost:3000/user/${id}`, data, {
-      headers: this.getHeaders(),
-    });
+    const url = `${this.apiUrl}/user/${id}`; // Use apiUrl for base URL
+    return this.http.put(url, data, { headers: this.getHeaders() });
   }
 }

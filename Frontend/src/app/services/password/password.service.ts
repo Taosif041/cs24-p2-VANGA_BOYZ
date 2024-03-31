@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from '../authentiction/authentiction.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PasswordService {
-  private apiUrl = 'http://localhost:3000/auth/reset-password/initiate';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -20,23 +21,23 @@ export class PasswordService {
   }
 
   initiateResetPassword(email: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { email });
+    return this.http.post<any>(`${this.apiUrl}/auth/reset-password/initiate`, {
+      email,
+    });
   }
-
-  private resetUrl = 'http://localhost:3000/auth/reset-password';
 
   confirmOTP(email: string, otp: string): Observable<any> {
     const data = { email, otp };
-    return this.http.post<any>(`${this.resetUrl}/confirm`, data);
+    return this.http.post<any>(
+      `${this.apiUrl}/auth/reset-password/confirm`,
+      data
+    );
   }
 
   changePassword(data: any) {
-    // Make a POST request to your server to change the password
-    return this.http.post<any>(
-      'http://localhost:3000/auth/change-password',
-      data,
-      { headers: this.getHeaders() }
-    );
+    return this.http.post<any>(`${this.apiUrl}/auth/change-password`, data, {
+      headers: this.getHeaders(),
+    });
   }
 
   getTemToken() {
@@ -45,14 +46,16 @@ export class PasswordService {
     }
     return null;
   }
+
   private getHeaders1(): HttpHeaders {
     const tempToken = this.getTemToken();
     return new HttpHeaders().set('Authorization', tempToken ? tempToken : '');
   }
+
   recoverPassword(password: string) {
     return this.http.post(
-      'http://localhost:3000/auth/reset-password/change-password',
-      { newPassword: password }, // Wrapping password in an object
+      `${this.apiUrl}/auth/reset-password/change-password`,
+      { newPassword: password },
       { headers: this.getHeaders1() }
     );
   }

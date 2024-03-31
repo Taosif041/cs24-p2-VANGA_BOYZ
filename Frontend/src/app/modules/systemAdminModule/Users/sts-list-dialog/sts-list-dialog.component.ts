@@ -67,8 +67,8 @@ export class StsListDialogComponent {
   }
 
   addManagerToSts(stsId: string) {
-    const managerId = this.data.id; // Assuming this is the manager's ID
-    this.stsService.addManagerToSts(stsId, managerId).subscribe({
+    const userId = this.data.id; // Assuming this is the manager's ID
+    this.stsService.addManagerToSts(stsId, userId).subscribe({
       next: (response) => {
         console.log('Manager added to STS', response);
         this._snackbar.openSnackBar('Manager added to STS', 'Done');

@@ -1,0 +1,36 @@
+<form [formGroup]="vehicleForm" (ngSubmit)="onSubmit()" class="vehicle-form">
+  <label> <b>Mnager Name: </b>{{ userInfo.firstName }} </label>
+  <label>
+    <b>STS Name: </b
+    >{{ userInfo.sts ? userInfo.sts.name : "No STS  available" }}
+  </label>
+  <mat-form-field appearance="outline">
+    <mat-label>Select Vehicle</mat-label>
+    <mat-select formControlName="vehicleId">
+      <mat-option *ngFor="let vehicle of vehicles" [value]="vehicle._id">
+        <span><b>VehicleNo: </b>{{ vehicle.registrationNumber }}</span
+        >, <b>Capacity: </b><span>{{ vehicle.capacity }}</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Select Landfill</mat-label>
+    <mat-select formControlName="landfillId">
+      <mat-option *ngFor="let landfill of landfills" [value]="landfill._id">
+        <span><b>landfillName: </b>{{ landfill.LandfillName }}</span
+        >, <b>Capacity: </b><span>{{ landfill.capacity }}</span>
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <label>
+    Weight of Waste:
+    <input type="number" formControlName="weightOfWaste" />
+  </label>
+  <label>
+    Distance:
+    <input type="number" formControlName="distance" />
+  </label>
+
+  <button type="submit" [disabled]="!vehicleForm.valid">Submit</button>
+</form>

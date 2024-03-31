@@ -3,13 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private apiUrl = 'http://localhost:3000/auth/login'; // Use HTTPS in production
-  private api = 'http://localhost:3000/'; // Use HTTPS in production
+  // private apiUrl = 'http://localhost:3000/auth/login'; // Use HTTPS in production
+  apiUrl = environment.apiUrl;
   user$: any;
 
   constructor(private http: HttpClient) {}

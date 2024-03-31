@@ -94,7 +94,7 @@ export class VehiclesComponent implements OnInit {
   }
 
   deleteVehicles(id: string) {
-    this._vehicleService.deleteVehicles(id).subscribe({
+    this._vehicleService.deleteVehicle(id).subscribe({
       next: (res) => {
         this._snackbar.openSnackBar('Vehicle deleted successfully', 'done');
         this.getVehiclesList();
