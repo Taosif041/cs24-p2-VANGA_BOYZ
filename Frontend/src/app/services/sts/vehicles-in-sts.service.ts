@@ -17,7 +17,7 @@ export class VehiclesInStsService {
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAuthToken();
-    return new HttpHeaders().set('Authorization', token ? token : '');
+    return new HttpHeaders().set('authorization', token ? token : '');
   }
 
   getVehicles(id: string): Observable<any> {

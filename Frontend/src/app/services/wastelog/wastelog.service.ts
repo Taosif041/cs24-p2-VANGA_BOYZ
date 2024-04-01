@@ -17,13 +17,9 @@ export class WastelogService {
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getAuthToken();
-
-    // Create headers in JSON format
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: token ? token : '',
+      authorization: token ? token : '',
     });
-
     return headers;
   }
 
@@ -35,8 +31,6 @@ export class WastelogService {
     distance: number
   ): Observable<any> {
     const url = `${this.apiUrl}/transfer-waste/departure/sts-to-landfill`;
-
-    // Format waste data
     const wasteData = {
       vehicleId,
       stsId,
@@ -44,7 +38,37 @@ export class WastelogService {
       weightOfWaste,
       distance,
     };
-
     return this.http.post(url, wasteData, { headers: this.getHeaders() });
+  }
+
+  getWasteLogs(): Observable<any> {
+    const url = `${this.apiUrl}/transfer-waste/waste-logs`;
+    return this.http.get(url, { headers: this.getHeaders() });
+  }
+
+  stsReceiveFunction(logId: string): Observable<any> {
+    const url = `${this.apiUrl}/transfer-waste/departure/landfill-to-sts`;
+    const body = { logId };
+    return this.http.post(url, body, { headers: this.getHeaders() });
+  }
+
+  landfillReceiveFunction(logId: string): Observable<any> {
+    const url = `${this.apiUrl}/transfer-waste/arrival/landfill`;
+    const body = { logId };
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(url, body, { headers });
+  }
+
+  departVehicle(logId: string): Observable<any> {
+    const url = `${this.apiUrl}/transfer-waste/departure/landfill-to-sts`;
+    const body = { logId };
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(url, body, { headers });
   }
 }

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers['authorization'];
+  console.log(req, "sllllll 54ll lll", token);
   
   if (!token) {
     return res.status(403).json({ message: 'Authentication token is required' });

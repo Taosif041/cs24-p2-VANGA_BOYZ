@@ -1,0 +1,35 @@
+<h1><b>Your vehicles status</b></h1>
+<div class="grid-container">
+  <div *ngFor="let log of pagedLogs" class="grid-item">
+    <mat-card class="card">
+      <mat-card-header>
+        <mat-card-title>Date: {{ log.date | date }}</mat-card-title>
+        <mat-card-subtitle>Status: {{ log.status }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Name: {{ log.sts.name }}</p>
+        <p>Status: {{ log.status }}</p>
+        <p>Vehicle: {{ log.vehicle.registrationNumber }}</p>
+        <button
+          *ngIf="log.status === 'goingToLandfill'"
+          mat-button
+          (click)="landfillReceiveFunction(log._id)"
+        >
+          Receive Vehicle
+        </button>
+        <button
+          *ngIf="log.status === 'inLandfill'"
+          mat-button
+          (click)="departVehicle(log._id)"
+        >
+          Depart Vehicle
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<mat-paginator
+  [pageSizeOptions]="[6, 12, 24]"
+  (page)="onPageChange($event)"
+  [length]="wasteLogs.length"
+></mat-paginator>

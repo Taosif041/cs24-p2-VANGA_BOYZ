@@ -1,1 +1,10 @@
-<p>vehicle-transfer-data works!</p>
+<button mat-raised-button color="primary" (click)="navigateToWasteLogs()">
+  See All Vehicles
+</button>
+
+@if(roleName == "STS Manager"){
+<button (click)="navigateToStsVehicles()">See Your Vehicles</button>
+} @if(roleName == "Landfill Manager"){
+
+<button (click)="navigateToLandfillVehicles()">See Your Vehicles</button>
+}

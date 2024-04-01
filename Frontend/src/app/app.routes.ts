@@ -15,6 +15,9 @@ import { RecoverPasswordComponent } from './modules/loginModule/recover-password
 import { UnassignedComponent } from './modules/systemAdminModule/Users/unassigned/unassigned.component';
 import { VehicleTransferComponent } from './modules/stsManagerModule/vehicle-transfer/vehicle-transfer.component';
 import { VehicleTransferDataComponent } from './modules/stsManagerModule/vehicle-transfer-data/vehicle-transfer-data.component';
+import { WastelogsComponent } from './modules/displayModule/wastelogs/wastelogs.component';
+import { LandfillVehiclesComponent } from './modules/displayModule/landfill-vehicles/landfill-vehicles.component';
+import { StsVehiclesComponent } from './modules/displayModule/sts-vehicles/sts-vehicles.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,4 +41,8 @@ export const routes: Routes = [
   { path: 'unassigned', component: UnassignedComponent },
   { path: 'transfer', component: VehicleTransferComponent },
   { path: 'transferdata', component: VehicleTransferDataComponent },
+
+  { path: 'wastelogs', component: WastelogsComponent },
+  { path: 'stsvehicle', component: StsVehiclesComponent },
+  { path: 'landfillvehicle', component: LandfillVehiclesComponent },
 ];

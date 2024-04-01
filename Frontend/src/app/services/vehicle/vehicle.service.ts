@@ -21,7 +21,7 @@ export class VehicleService {
     // Create headers in JSON format
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: token ? token : '',
+      authorization: token ? token : '',
     });
 
     return headers;

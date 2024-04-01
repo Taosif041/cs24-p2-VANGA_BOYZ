@@ -116,6 +116,7 @@ export class VehicleTransferComponent implements OnInit {
         this.sts_Id = this.userInfo.sts._id;
         this.stsInfo = this.userInfo.sts;
         console.log('stsInfo', this.stsInfo);
+        console.log('sts_Id', this.sts_Id);
 
         this.getVehiclesList();
         this.getLandfills();
