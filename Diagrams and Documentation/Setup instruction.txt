@@ -1,0 +1,26 @@
+Setting Up the Application Manually
+If the Docker Compose setup encounters issues, you can manually set up the application by following these steps:
+
+Backend Setup:
+Navigate to the Backend directory:
+cd /Backend
+
+Install dependencies:
+npm install
+
+Start the backend server:
+npm start
+
+Frontend Setup:
+Navigate to the Frontend directory:
+cd /Frontend
+
+Install dependencies:
+npm install
+
+Start the frontend application:
+npm start
+
+Admin Credentials:
+Admin Email: admin@example.com
+Password: password
