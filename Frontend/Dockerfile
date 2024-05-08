@@ -1,20 +1,12 @@
-# Use the official Node.js image as the base image
-FROM node:20.9.0-alpine
-
-# Set the working directory inside the container
-WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json to the container
+FROM node:18-alpine as build
+WORKDIR /app/src
 COPY package*.json ./
+RUN npm ci
+COPY . ./
+RUN npm run build
 
-# Install project dependencies
-RUN npm install
-
-# Copy the entire Angular app to the container
-COPY . .
-
-# Expose port 4200 (default port for Angular development server)
-EXPOSE 4200
-
-# Start the Angular app
-CMD ["npm", "start"]
+FROM node:18-alpine
+WORKDIR /usr/app
+COPY --from=build /app/src/dist/project/server ./
+CMD node server.mjs
+EXPOSE 4000
