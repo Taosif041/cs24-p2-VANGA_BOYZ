@@ -53,14 +53,13 @@ exports.getContractor = async (req, res) => {
 };
 exports.deleteContractor = async (req, res) => {
   try {
-    const contractor = await ThirdPartyContractor.findByIdAndRemove(
-      req.params.contractorId
-    );
-    if (!contractor) {
-      return res.status(404).json({ message: "Contractor not found" });
+    const result = await ThirdPartyContractor.deleteOne({ _id: req.params.contractorId });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Contractor not found' });
     }
-    res.status(200).json({ message: "Contractor deleted successfully" });
+    res.status(200).json({ message: 'Contractor deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+

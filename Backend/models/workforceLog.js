@@ -11,10 +11,12 @@ const WorkforceLogSchema = new mongoose.Schema({
     default: Date.now
   },
   loginTime: {
-    type: Date
+    type: Date,
+    default:null
   },
   logoutTime: {
-    type: Date
+    type: Date,
+    default:null
   },
   totalHoursWorked: {
     type: Number
@@ -23,11 +25,8 @@ const WorkforceLogSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  absences: {
-    type: Boolean,
-    default: false
-  },
-  leaves: {
+  
+  leave: {
     type: Boolean,
     default: false
   }

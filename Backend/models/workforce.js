@@ -22,6 +22,12 @@ const WorkforceSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  requiredWorkTimeHour:
+  {
+    type: Number,
+    required: true
+
+  },
   contactNumber: {
     type: String,
     required: true

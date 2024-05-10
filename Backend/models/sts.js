@@ -22,6 +22,16 @@ const STSSchema = new mongoose.Schema({
     type: [Number], // Change the type to an array of Numbers
     required: true
   },
+  collectionHours: {
+    startTime: {
+      type: String,
+      required: true
+    },
+    endTime: {
+      type: String,
+      required: true
+    }
+  },
   managers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
