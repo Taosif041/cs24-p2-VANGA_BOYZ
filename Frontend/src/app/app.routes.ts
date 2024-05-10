@@ -18,10 +18,12 @@ import { VehicleTransferDataComponent } from './modules/stsManagerModule/vehicle
 import { WastelogsComponent } from './modules/displayModule/wastelogs/wastelogs.component';
 import { LandfillVehiclesComponent } from './modules/displayModule/landfill-vehicles/landfill-vehicles.component';
 import { StsVehiclesComponent } from './modules/displayModule/sts-vehicles/sts-vehicles.component';
+import { PageNotFoundComponent } from './modules/homeModule/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'page', component: PageNotFoundComponent },
 
   { path: 'login', component: LoginFormComponent },
   { path: 'forgetpassword', component: FogetPasswordComponent },

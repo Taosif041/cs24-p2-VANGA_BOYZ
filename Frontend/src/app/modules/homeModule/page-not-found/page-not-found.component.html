@@ -1,0 +1,38 @@
+<h1 class="font-bold text-2xl mb-4 flex justify-center">
+  All working vehicles
+</h1>
+
+<div class="grid grid-cols-4 gap-2">
+  <div *ngFor="let item of currentPage">
+    <div
+      class="max-w-sm mx-auto p-8 bg-blue-400 rounded-2xl shadow-xl space-y-2 space-x-2 sm:space-y-0"
+    >
+      <img
+        class="h-24 rounded-full mx-auto ring-offset-2 ring-2 sm:flex-shrink-0 transform hover:scale-105 duration-500"
+        src="./../../../../assets/dncc-logo.png"
+        alt="logo"
+      />
+      <div class="text-center space-y-1.5">
+        <div class="space-y-1.5">
+          <p
+            class="text-2xl text-black font-semibold font-mono hover:font-serif"
+          >
+            0manush
+          </p>
+          <a class="text-gray-500 font-medium" href="https://codeforces.com/"
+            >CodeForces</a
+          >
+        </div>
+        <button class="btn-card1">View More</button>
+      </div>
+    </div>
+  </div>
+
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [length]="totalItems"
+    (page)="onPageChange($event)"
+  >
+  </mat-paginator>
+</div>

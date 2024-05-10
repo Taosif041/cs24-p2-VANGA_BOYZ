@@ -48,6 +48,7 @@ export class WastelogsComponent implements OnInit {
     const endIndex = startIndex + event.pageSize;
     this.pagedLogs = this.wasteLogs.slice(startIndex, endIndex);
   }
+
   getStatusClass(status: string): string {
     switch (status) {
       case 'inSts':

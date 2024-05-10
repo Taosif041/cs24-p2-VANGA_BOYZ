@@ -1,30 +1,76 @@
 <h1><b>All working vehicles</b></h1>
-<div class="grid-container">
-  <div *ngFor="let log of pagedLogs" class="grid-item">
+<div class="grid-container m-auto">
+  <div
+    *ngFor="let log of pagedLogs"
+    class="grid-item max-w-lg mx-auto p-4 bg-white rounded-2xl shadow-xl space-y-2 space-x-2"
+  >
     <mat-card class="card" [ngClass]="getStatusClass(log.status)">
-      <mat-card-header>
+      <mat-card-header class="flex justify-center items-center">
         <mat-card-title>Date: {{ log.date | date }}</mat-card-title>
         <mat-card-subtitle
-          ><b>Status: {{ log.status }} </b></mat-card-subtitle
+          ><b>Status: {{ log.status }}</b></mat-card-subtitle
         >
       </mat-card-header>
       <mat-card-content>
-        <p>Distance: {{ log.distance }}</p>
-        <p>Weight of Waste: {{ log.weightOfWaste }}</p>
-        <p>STS Departure Time: {{ log.stsDepartureTime | date }}</p>
-        <p>Oil Consumed: {{ log.oilConsumed }}</p>
-        <p>Vehicle Registration Number: {{ log.vehicle.registrationNumber }}</p>
-        <p>Vehicle Type: {{ log.vehicle.type }}</p>
-        <p>Vehicle Capacity: {{ log.vehicle.capacity }}</p>
-        <p>STS Manager Name: {{ log.sts.name }}</p>
-        <p>Ward Number: {{ log.sts.wardNumber }}</p>
-        <p>STS Capacity: {{ log.sts.capacity }}</p>
+        <table class="card-table">
+          <!-- <tr>
+            <td>Date:</td>
+            <td>{{ log.date | date }}</td>
+          </tr> -->
+          <tr>
+            <!-- <td>Status:</td>
+            <td>
+              <b>{{ log.status }}</b>
+            </td> -->
+          </tr>
+          <tr>
+            <td>Distance:</td>
+            <td>{{ log.distance }}</td>
+          </tr>
+          <tr>
+            <td>Weight of Waste:</td>
+            <td>{{ log.weightOfWaste }}</td>
+          </tr>
+          <tr>
+            <td>STS Departure Time:</td>
+            <td>{{ log.stsDepartureTime | date }}</td>
+          </tr>
+          <tr>
+            <td>Oil Consumed:</td>
+            <td>{{ log.oilConsumed }}</td>
+          </tr>
+          <tr>
+            <td>Vehicle Registration Number:</td>
+            <td>{{ log.vehicle.registrationNumber }}</td>
+          </tr>
+          <tr>
+            <td>Vehicle Type:</td>
+            <td>{{ log.vehicle.type }}</td>
+          </tr>
+          <tr>
+            <td>Vehicle Capacity:</td>
+            <td>{{ log.vehicle.capacity }}</td>
+          </tr>
+          <tr>
+            <td>STS Manager Name:</td>
+            <td>{{ log.sts.name }}</td>
+          </tr>
+          <tr>
+            <td>Ward Number:</td>
+            <td>{{ log.sts.wardNumber }}</td>
+          </tr>
+          <tr>
+            <td>STS Capacity:</td>
+            <td>{{ log.sts.capacity }}</td>
+          </tr>
+        </table>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
+
 <mat-paginator
-  [pageSizeOptions]="[6, 12, 24]"
+  [pageSizeOptions]="[6, 12, 18]"
   (page)="onPageChange($event)"
   [length]="wasteLogs.length"
 ></mat-paginator>
