@@ -1,3 +1,4 @@
+import { PrimaryWastelogFormComponent } from './modules/stsManagerModule/primary-wastelog-form/primary-wastelog-form.component';
 import { ChangeInfoComponent } from './modules/authenticatedUserModule/change-info/change-info.component';
 import { HomeComponent } from './modules/homeModule/home/home.component';
 import { Routes } from '@angular/router';
@@ -19,6 +20,11 @@ import { WastelogsComponent } from './modules/displayModule/wastelogs/wastelogs.
 import { LandfillVehiclesComponent } from './modules/displayModule/landfill-vehicles/landfill-vehicles.component';
 import { StsVehiclesComponent } from './modules/displayModule/sts-vehicles/sts-vehicles.component';
 import { PageNotFoundComponent } from './modules/homeModule/page-not-found/page-not-found.component';
+import { RegisterContructorComponent } from './primary/contructorModule/register-contructor/register-contructor.component';
+import { RegisterContructorFormComponent } from './primary/contructorModule/register-contructor-form/register-contructor-form.component';
+import { WorkforceRegistrationComponent } from './primary/workforceModule/workforce-registration/workforce-registration.component';
+import { WorkforceRegistrationFormComponent } from './primary/workforceModule/workforce-registration-form/workforce-registration-form.component';
+import { PrimaryWasteLogComponent } from './modules/stsManagerModule/primary-wastelog/primary-wastelog.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -47,4 +53,28 @@ export const routes: Routes = [
   { path: 'wastelogs', component: WastelogsComponent },
   { path: 'stsvehicle', component: StsVehiclesComponent },
   { path: 'landfillvehicle', component: LandfillVehiclesComponent },
+
+  { path: 'register-contructor', component: RegisterContructorComponent },
+  {
+    path: 'register-contructor-form',
+    component: RegisterContructorFormComponent,
+  },
+
+  {
+    path: 'register-workforce',
+    component: WorkforceRegistrationComponent,
+  },
+  {
+    path: 'register-workforce-form',
+    component: WorkforceRegistrationFormComponent,
+  },
+
+  {
+    path: 'primaryWastelog',
+    component: PrimaryWasteLogComponent,
+  },
+  {
+    path: 'primaryWastelogForm',
+    component: PrimaryWastelogFormComponent,
+  },
 ];

@@ -1,0 +1,53 @@
+<div class="container">
+  <h1>Create New Primary Waste Log</h1>
+
+  <form [formGroup]="primaryWasteLogForm" (ngSubmit)="onFormSubmit()">
+    <div class="content">
+      <mat-form-field appearance="outline">
+        <mat-label>Time and Date of Collection</mat-label>
+        <input matInput formControlName="timeAndDateOfCollection" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Amount of Waste Collected</mat-label>
+        <input matInput formControlName="amountOfWasteCollected" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contractor ID</mat-label>
+        <input matInput formControlName="contractorID" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Type of Waste Collected</mat-label>
+        <input matInput formControlName="typeOfWasteCollected" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Designated STS for Deposit</mat-label>
+        <input matInput formControlName="designatedSTSforDeposit" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Vehicle Used For Transportation</mat-label>
+        <input matInput formControlName="vehicleUsedForTransportation" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Action</mat-label>
+        <input matInput formControlName="action" />
+      </mat-form-field>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-button
+        color="primary"
+        (click)="navigateToRegisterPrimaryWasteLog()"
+      >
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+</div>
