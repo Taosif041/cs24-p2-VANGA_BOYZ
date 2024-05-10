@@ -14,6 +14,10 @@ const STSSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  compensationFinePerTon:{
+    type: Number,
+    required:true
+  },
   gpsCoordinates: {
     type: [Number], // Change the type to an array of Numbers
     required: true

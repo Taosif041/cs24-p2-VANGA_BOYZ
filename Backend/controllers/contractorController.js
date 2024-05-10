@@ -1,6 +1,6 @@
 const ThirdPartyContractor = require("../models/contractor");
 const STS = require("../models/sts"); // Import the STS model
-
+const contractorValidationSchema=require('../validators/contractor')
 exports.createContractor = async (req, res) => {
   // Validate the request body against the schema
   const { error } = contractorValidationSchema.validate(req.body);
