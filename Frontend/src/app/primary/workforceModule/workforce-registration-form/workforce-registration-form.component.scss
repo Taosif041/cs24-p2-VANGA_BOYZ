@@ -1,0 +1,53 @@
+/* register-contructor-form.component.scss */
+
+.container {
+  margin-right: 20%;
+  margin-left: 20%;
+  margin-top: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  // gap: 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  padding-right: 10px;
+}
+
+.mat-form-field {
+  width: 200px;
+}
+
+.mat-table {
+  width: 300px;
+}
+
+// .mat-row,
+// .mat-header-row {
+// }
+
+.mat-row {
+  border-bottom: 1px solid #ccc;
+}
+
+.mat-header-row {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+// .mat-cell,
+// .mat-header-cell {
+//   // flex: 1;
+//   // padding: 10px;
+// }
+
+.mat-paginator {
+  margin-top: 20px;
+}
+
+/* Additional styles can be added as needed */

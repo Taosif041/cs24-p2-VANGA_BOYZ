@@ -1,0 +1,79 @@
+<div class="container">
+  <h1>Create New Workforce</h1>
+
+  <form [formGroup]="workforceForm" (ngSubmit)="onFormSubmit()">
+    <div class="content">
+      <mat-form-field appearance="outline">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" />
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput type="date" formControlName="dateOfBirth" />
+      </mat-form-field> -->
+
+      <mat-form-field appearance="outline">
+        <mat-label>Date of Birth</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dateOfBirth"
+        />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Date of Hire</mat-label>
+        <input matInput type="date" formControlName="dateOfHire" />
+      </mat-form-field> -->
+
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Date of Hire</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfHire" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field> -->
+
+      <mat-form-field appearance="outline">
+        <mat-label>Job Title</mat-label>
+        <input matInput formControlName="jobTitle" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment rate per hour</mat-label>
+        <input matInput formControlName="paymentRatePerHour" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contact Information</mat-label>
+        <input matInput formControlName="contactInformation" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Assigned Collection Route</mat-label>
+        <input matInput formControlName="assignedCollectionRoute" />
+      </mat-form-field>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-button
+        color="primary"
+        (click)="navigateToRegisterWorkforce()"
+      >
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+</div>

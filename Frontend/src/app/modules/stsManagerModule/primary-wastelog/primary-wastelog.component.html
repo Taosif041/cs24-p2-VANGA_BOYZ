@@ -1,0 +1,98 @@
+<div class="main-body">
+  <h1>Primary Waste Log</h1>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="navigateToRegisterPrimaryWasteLog()"
+  >
+    Register New Entry
+  </button>
+  <br />
+  <mat-form-field>
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Search for entries"
+      #input
+    />
+  </mat-form-field>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Columns -->
+      <ng-container matColumnDef="timeAndDateOfCollection">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Time and Date of Collection
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.timeAndDateOfCollection }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amountOfWasteCollected">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Amount of Waste Collected (in kilograms)
+        </th>
+        <td mat-cell *matCellDef="let row">{{ row.amountOfWasteCollected }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="contractorID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Contractor ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.contractorID }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="typeOfWasteCollected">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Type of Waste Collected
+        </th>
+        <td mat-cell *matCellDef="let row">{{ row.typeOfWasteCollected }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="designatedSTSforDeposit">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Designated STS for Deposit
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.designatedSTSforDeposit }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="vehicleUsedForTransportation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Vehicle Used for Transportation
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.vehicleUsedForTransportation }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <!-- <button mat-icon-button color="warn" (click)="deleteEntry(row._id)">
+              <mat-icon>delete</mat-icon>
+            </button> -->
+        </td>
+      </ng-container>
+
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- Data Row -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- No Data Row -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="6">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="Select page of Primary Waste Logs"
+    ></mat-paginator>
+  </div>
+</div>

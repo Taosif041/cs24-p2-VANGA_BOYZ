@@ -1,0 +1,63 @@
+<div class="container">
+  <h1>Create New Contructor</h1>
+
+  <form [formGroup]="contructorForm" (ngSubmit)="onFormSubmit()">
+    <div class="content">
+      <mat-form-field appearance="outline">
+        <mat-label>Company Name</mat-label>
+        <input matInput formControlName="companyName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Registration ID</mat-label>
+        <input matInput formControlName="registrationId" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>TIN of the Company</mat-label>
+        <input matInput formControlName="tin" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contact Number</mat-label>
+        <input matInput formControlName="contactNumber" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Workforce Size</mat-label>
+        <input matInput formControlName="workforceSize" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment per Tonnage of Waste</mat-label>
+        <input matInput formControlName="paymentPerTonnage" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Required Amount of Waste per Day</mat-label>
+        <input matInput formControlName="requiredAmountPerDay" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contract Duration</mat-label>
+        <input matInput formControlName="contractDuration" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Designated STS</mat-label>
+        <input matInput formControlName="designatedSTS" />
+      </mat-form-field>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-button
+        color="primary"
+        (click)="navigateToRegisterConstructor()"
+      >
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+  </form>
+</div>

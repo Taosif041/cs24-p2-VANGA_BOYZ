@@ -43,6 +43,10 @@ export class AppComponent {
   navigateToHome() {
     this.router.navigate(['/home']);
   }
+
+  navigateToTransport() {
+    this.router.navigate(['/transfer']);
+  }
   logout() {
     this._authService.logout();
     this._snackbarService.openSnackBar('Logout successful', 'Done');

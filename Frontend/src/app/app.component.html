@@ -43,6 +43,12 @@
         <mat-icon>account_box</mat-icon>
         <span>Login with otp</span>
       </a>
+      } @if(this._authService.isAuthenticated()){
+
+      <a mat-list-item routerLink="transfer">
+        <mat-icon>account_box</mat-icon>
+        <span>Start Transportation</span>
+      </a>
       }
     </mat-nav-list>
   </mat-sidenav>

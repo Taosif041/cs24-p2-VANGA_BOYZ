@@ -5,6 +5,7 @@ import { NgClass, NgFor } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-wastelogs',
@@ -16,6 +17,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatPaginatorModule,
     MatGridListModule,
     NgClass,
+    NgxPaginationModule,
   ],
   templateUrl: './wastelogs.component.html',
   styleUrl: './wastelogs.component.scss',
@@ -43,6 +45,8 @@ export class WastelogsComponent implements OnInit {
       }
     );
   }
+  p: any;
+  pageSize = 4;
   onPageChange(event: any): void {
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;
@@ -62,5 +66,9 @@ export class WastelogsComponent implements OnInit {
       default:
         return '';
     }
+  }
+
+  formatOilConsumed(value: number): string {
+    return value.toFixed(2); // Rounds to 2 decimal places
   }
 }

@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
         // Handle the response here
         this.userInfo = userData;
         console.log('User Data:', userData);
+        sessionStorage.setItem('userInfo', JSON.stringify(userData));
       });
     } else {
       console.log('User not found');
