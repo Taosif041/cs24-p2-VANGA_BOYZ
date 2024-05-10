@@ -20,7 +20,8 @@ async function initializeDB() {
       'Add/Remove Vehicles',
       'Manage Oil Consumption Data',
       'Log vehicle arrivals and departures including mileage',
-      
+      'Add workforce',
+      'Entry workforce arrival/departure',
     ];
 
     const createdPermissions = await Promise.all(
@@ -39,6 +40,10 @@ async function initializeDB() {
       {
         name: 'Landfill Manager',
         permissions: [createdPermissions[8]]
+      },
+      {
+        name:'Contractor Manager',
+        permissions: createdPermissions.slice(9, 11)
       }
     ];
 

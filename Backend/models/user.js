@@ -63,6 +63,11 @@ const UserSchema = new mongoose.Schema({
     default:{}
   
   },
+  contractor:{
+    type:Object,
+    default:{}
+
+  },
   createdAt: {
     type: Date,
     default: Date.now
