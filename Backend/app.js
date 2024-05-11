@@ -11,6 +11,8 @@ const transferWasteRouter = require('./routes/transferRoutes');
 const contractorRouter=require('./routes/contractorRoutes');
 const workforceRouter=require("./routes/workforceRoutes");
 const workforceLogRouter= require('./routes/workforceLogRoutes');
+const householdRouter=require('./routes/householdUserRoutes');
+const apphandleRouter=require('./routes/apphandleRoutes');
 const connectDB = require('./config/db');
 const authMiddleware = require('./middlewares/authMiddleware');
 const cors = require('cors');
@@ -42,8 +44,10 @@ app.use('/landfill',authMiddleware,landfillRoutes); // Use landfillRoutes
 app.use('/transfer-waste',authMiddleware, transferWasteRouter);
 app.use('/contractor',authMiddleware,contractorRouter);
 app.use('/workforce',authMiddleware,workforceRouter);
-//app.use('/workforcelog',authMiddleware,workforceLogRouter);
+app.use('/workforcelog',authMiddleware,workforceLogRouter);
 app.use('/auth', authRoutes); // Use authRoutes
+app.use('/household',householdRouter);
+app.use('/apphandle',apphandleRouter);
 // Middleware for handling undefined routes
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not defined' });
