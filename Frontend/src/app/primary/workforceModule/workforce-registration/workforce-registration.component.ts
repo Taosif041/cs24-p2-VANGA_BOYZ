@@ -39,12 +39,9 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 export class WorkforceRegistrationComponent implements OnInit {
   displayedColumns: string[] = [
     'fullName',
-    'dateOfBirth',
     'dateOfHire',
     'jobTitle',
     'paymentRatePerHour',
-    'contactInformation',
-    'assignedCollectionRoute',
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
@@ -96,5 +93,8 @@ export class WorkforceRegistrationComponent implements OnInit {
 
   navigateToRegisterWorkforceForm() {
     this.router.navigate(['/register-workforce-form']);
+  }
+  extractFirstTenCharacters(date: string): string {
+    return date.substring(0, 10);
   }
 }

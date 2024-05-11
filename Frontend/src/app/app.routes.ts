@@ -25,6 +25,11 @@ import { RegisterContructorFormComponent } from './primary/contructorModule/regi
 import { WorkforceRegistrationComponent } from './primary/workforceModule/workforce-registration/workforce-registration.component';
 import { WorkforceRegistrationFormComponent } from './primary/workforceModule/workforce-registration-form/workforce-registration-form.component';
 import { PrimaryWasteLogComponent } from './modules/stsManagerModule/primary-wastelog/primary-wastelog.component';
+import { WorkingHourComponent } from './primary/workHourModule/working-hour/working-hour.component';
+import { DailyMonitorComponent } from './primary/workHourModule/daily-monitor/daily-monitor.component';
+import { MonthlyMonitorComponent } from './primary/workHourModule/monthly-monitor/monthly-monitor.component';
+import { MonitorStyleComponent } from './primary/workHourModule/monitor-style/monitor-style.component';
+import { ContractorListComponent } from './modules/systemAdminModule/Users/contractor-list/contractor-list.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -77,4 +82,11 @@ export const routes: Routes = [
     path: 'primaryWastelogForm',
     component: PrimaryWastelogFormComponent,
   },
+
+  { path: 'workinghour', component: WorkingHourComponent },
+  { path: 'monitor-style', component: MonitorStyleComponent },
+  { path: 'daily-monitor', component: DailyMonitorComponent },
+  { path: 'monthly-monitor', component: MonthlyMonitorComponent },
+
+  { path: 'contructor-list', component: ContractorListComponent },
 ];

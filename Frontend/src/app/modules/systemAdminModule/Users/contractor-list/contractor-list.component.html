@@ -1,0 +1,7 @@
+<div class="m-6 container">
+  @for(constructor of constructors; track constructor){
+  <button class="flex" (click)="addManagerToContructor(constructor._id)">
+    {{ constructor.companyName }}
+  </button>
+  }
+</div>

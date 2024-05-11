@@ -27,14 +27,11 @@
         <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="dateOfBirth">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Of Birth</th>
-        <td mat-cell *matCellDef="let row">{{ row.dateOfBirth }}</td>
-      </ng-container>
-
       <ng-container matColumnDef="dateOfHire">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Of Hire</th>
-        <td mat-cell *matCellDef="let row">{{ row.dateOfHire }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ extractFirstTenCharacters(row.dateOfHire) }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="jobTitle">
@@ -47,22 +44,6 @@
           Payment Rate Per Hour
         </th>
         <td mat-cell *matCellDef="let row">{{ row.paymentRatePerHour }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="contactInformation">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          contact Information
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.contactInformation }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="assignedCollectionRoute">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          assigned Collection Route
-        </th>
-        <td mat-cell *matCellDef="let row">
-          {{ row.assignedCollectionRoute }}
-        </td>
       </ng-container>
 
       <!-- Fruit Column -->
@@ -95,8 +76,7 @@
 
     <mat-paginator
       [pageSizeOptions]="[5, 10, 25, 100]"
-      aria-label="Select page of Workforce
-            s"
+      aria-label="Select page of Workforces"
     ></mat-paginator>
   </div>
 </div>

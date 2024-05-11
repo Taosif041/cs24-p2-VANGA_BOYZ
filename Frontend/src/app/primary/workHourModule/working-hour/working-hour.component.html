@@ -1,0 +1,61 @@
+<div class="grid grid-cols-3 hello">
+  <mat-card class="container">
+    <h4 class="font-semibold">Login Time Entry</h4>
+    <mat-form-field>
+      <mat-label>Select a person</mat-label>
+      <mat-select [(value)]="selectedEmployee1" required>
+        <mat-option *ngFor="let employee of employees" [value]="employee">{{
+          employee
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="navigateToDailyMonitor()"
+      [disabled]="!selectedEmployee1"
+    >
+      Confirm
+    </button>
+  </mat-card>
+
+  <mat-card class="container flex justify-center">
+    <h4 class="font-semibold content-center">Log out Time Entry</h4>
+    <mat-form-field>
+      <mat-label>Select a person</mat-label>
+      <mat-select [(value)]="selectedEmployee2" required>
+        <mat-option *ngFor="let employee of employees" [value]="employee">{{
+          employee
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="warn"
+      (click)="navigateToDailyMonitor()"
+      [disabled]="!selectedEmployee2"
+    >
+      Confirm
+    </button>
+  </mat-card>
+
+  <mat-card class="container">
+    <h4 class="font-semibold">On Leave</h4>
+    <mat-form-field>
+      <mat-label>Select a person</mat-label>
+      <mat-select [(value)]="selectedEmployee3" required>
+        <mat-option *ngFor="let employee of employees" [value]="employee">{{
+          employee
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="navigateToDailyMonitor()"
+      [disabled]="!selectedEmployee3"
+    >
+      Confirm
+    </button>
+  </mat-card>
+</div>

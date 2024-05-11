@@ -1,0 +1,24 @@
+.container {
+  max-width: 250px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #3f51b5;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #283593;
+}

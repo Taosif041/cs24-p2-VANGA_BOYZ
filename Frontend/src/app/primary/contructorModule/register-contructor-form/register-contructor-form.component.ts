@@ -15,6 +15,8 @@ import {
 
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
 import { ContructorService } from '../../../services/contructor/contructor.service';
+import { StsService } from '../../../services/sts/sts.service';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-register-contructor-form',
@@ -25,18 +27,21 @@ import { ContructorService } from '../../../services/contructor/contructor.servi
     ReactiveFormsModule,
     MatButtonModule,
     MatMenuModule,
+    NgFor,
   ],
   templateUrl: './register-contructor-form.component.html',
   styleUrl: './register-contructor-form.component.scss',
 })
 export class RegisterContructorFormComponent implements OnInit {
   contructorForm: FormGroup;
+  stsList: { _id: string; name: string }[] = [];
 
   constructor(
     private _fb: FormBuilder,
     private _contructorService: ContructorService,
     private _snackbar: SnackbarService,
-    private router: Router
+    private router: Router,
+    private _stsService: StsService
   ) {
     this.contructorForm = this._fb.group({
       companyName: ['', Validators.required],
@@ -44,14 +49,16 @@ export class RegisterContructorFormComponent implements OnInit {
       tin: ['', Validators.required],
       contactNumber: ['', Validators.required],
       workforceSize: ['', Validators.required],
-      paymentPerTonnage: ['', Validators.required],
-      requiredAmountPerDay: ['', Validators.required],
+      paymentPerTonnageOfWaste: ['', Validators.required],
+      requiredAmountOfWastePerDay: ['', Validators.required],
       contractDuration: ['', Validators.required],
       designatedSTS: ['', Validators.required],
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getAllSts();
+  }
 
   onFormSubmit(): void {
     if (this.contructorForm.valid) {
@@ -62,8 +69,8 @@ export class RegisterContructorFormComponent implements OnInit {
         tin: formData.tin,
         contactNumber: formData.contactNumber,
         workforceSize: formData.workforceSize,
-        paymentPerTonnage: Number(formData.paymentPerTonnage),
-        requiredAmountPerDay: Number(formData.requiredAmountPerDay),
+        paymentPerTonnageOfWaste: formData.paymentPerTonnageOfWaste,
+        requiredAmountOfWastePerDay: formData.requiredAmountOfWastePerDay,
         contractDuration: formData.contractDuration,
         designatedSTS: formData.designatedSTS,
       };
@@ -82,5 +89,21 @@ export class RegisterContructorFormComponent implements OnInit {
   }
   navigateToRegisterConstructor() {
     this.router.navigate(['/register-contructor']);
+  }
+
+  getAllSts() {
+    this._stsService.getStsList().subscribe({
+      next: (stsLists: any[]) => {
+        // Extract _id and name from each STS and store in stsList array
+        this.stsList = stsLists.map((sts) => ({
+          _id: sts._id,
+          name: sts.name,
+        }));
+        console.log(this.stsList);
+      },
+      error: (error) => {
+        console.error('Error fetching STS:', error);
+      },
+    });
   }
 }

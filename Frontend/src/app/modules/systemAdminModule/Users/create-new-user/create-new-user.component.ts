@@ -18,7 +18,7 @@ import { LandfillListDialogComponent } from '../landfill-list-dialog/landfill-li
 import { StsListDialogComponent } from '../sts-list-dialog/sts-list-dialog.component';
 import { DialogRef } from '@angular/cdk/dialog';
 import { UnassignedComponent } from '../unassigned/unassigned.component';
-import { DeleteUserDialogComponent } from '../delete-user-dialog/delete-user-dialog.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-new-user',
@@ -57,7 +57,8 @@ export class CreateNewUserComponent implements OnInit {
     private _dialogue: MatDialog,
     private _userService: UserService,
     private _snackbar: SnackbarService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.getUserList();
@@ -161,19 +162,7 @@ export class CreateNewUserComponent implements OnInit {
       error: console.log,
     });
   }
-
-  // openDeleteUserDialog(rowId: string): void {
-  //   const dialogRef = this.dialog.open(DeleteUserDialogComponent, {
-  //     width: '300px',
-  //     data: { id: rowId },
-  //   });
-  //   dialogRef.afterClosed().subscribe({
-  //     next: (val) => {
-  //       if (val) {
-  //         this.getUserList();
-  //       }
-  //     },
-  //     error: console.log,
-  //   });
-  // }
+  navigateToContactList(_id: string) {
+    this.router.navigate(['/contructor-list'], { queryParams: { id: _id } });
+  }
 }

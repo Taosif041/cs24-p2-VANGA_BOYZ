@@ -26,44 +26,36 @@
         <td mat-cell *matCellDef="let row">{{ row.companyName }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="registrationId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          registration Id
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.registrationId }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="tin">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>tin</th>
-        <td mat-cell *matCellDef="let row">{{ row.tin }}</td>
-      </ng-container>
-
       <ng-container matColumnDef="contactNumber">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          contact Number
+          Contact Number
         </th>
         <td mat-cell *matCellDef="let row">{{ row.contactNumber }}</td>
       </ng-container>
 
       <ng-container matColumnDef="workforceSize">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          workforce Size.
+          Workforce Size.
         </th>
         <td mat-cell *matCellDef="let row">{{ row.workforceSize }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="paymentPerTonnage">
+      <ng-container matColumnDef="paymentPerTonnageOfWaste">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          payment Per Tonnage
+          Payment Per Tonnage
         </th>
-        <td mat-cell *matCellDef="let row">{{ row.paymentPerTonnage }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ row.paymentPerTonnageOfWaste }}
+        </td>
       </ng-container>
 
-      <ng-container matColumnDef="requiredAmountPerDay">
+      <ng-container matColumnDef="requiredAmountOfWastePerDay">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          required Amount Per Day
+          Required Amount Per Day
         </th>
-        <td mat-cell *matCellDef="let row">{{ row.requiredAmountPerDay }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ row.requiredAmountOfWastePerDay }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="contractDuration">
@@ -73,10 +65,10 @@
         <td mat-cell *matCellDef="let row">{{ row.contractDuration }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="designatedSTS">
+      <!-- <ng-container matColumnDef="designatedSTS">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>designatedSTS</th>
         <td mat-cell *matCellDef="let row">{{ row.designatedSTS }}</td>
-      </ng-container>
+      </ng-container> -->
 
       <!-- Fruit Column -->
       <ng-container matColumnDef="action">

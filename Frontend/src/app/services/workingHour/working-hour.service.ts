@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ContructorService {
+export class WorkingHourService {
   private apiUrl = environment.apiUrl;
 
   constructor(
@@ -27,47 +27,33 @@ export class ContructorService {
     return headers;
   }
 
-  getContructorList(): Observable<any> {
-    return this._http.get(`${this.apiUrl}/contractor`, {
+  addWorkingHour(data: any): Observable<any> {
+    return this._http.post(`${this.apiUrl}/workingHour`, data, {
       headers: this.getHeaders(),
     });
   }
 
-  getContructorById(id: string): Observable<any> {
-    return this._http.get(`${this.apiUrl}/contractor/${id}`, {
+  getWorkingHourList(): Observable<any> {
+    return this._http.get(`${this.apiUrl}/workingHour`, {
       headers: this.getHeaders(),
     });
   }
 
-  addContructor(data: any): Observable<any> {
-    return this._http.post(`${this.apiUrl}/contractor`, data, {
+  getWorkingHourById(id: string): Observable<any> {
+    return this._http.get(`${this.apiUrl}/workingHour/${id}`, {
       headers: this.getHeaders(),
     });
   }
 
-  deleteContructor(id: string): Observable<any> {
-    return this._http.delete(`${this.apiUrl}/contractor/${id}`, {
+  updateWorkingHour(id: string, data: any): Observable<any> {
+    return this._http.put(`${this.apiUrl}/workingHour/${id}`, data, {
       headers: this.getHeaders(),
     });
   }
 
-  updateContructor(id: string, data: any): Observable<any> {
-    return this._http.put(`${this.apiUrl}/contractor/${id}`, data, {
+  deleteWorkingHour(id: string): Observable<any> {
+    return this._http.delete(`${this.apiUrl}/workingHour/${id}`, {
       headers: this.getHeaders(),
     });
-  }
-
-  addManagerToContructor(
-    contractorId: string,
-    managerId: string
-  ): Observable<any> {
-    const data = { managerId };
-    return this._http.post(
-      `${this.apiUrl}/contractor/${contractorId}/managers`,
-      data,
-      {
-        headers: this.getHeaders(),
-      }
-    );
   }
 }

@@ -14,35 +14,15 @@
       </mat-form-field> -->
 
       <mat-form-field appearance="outline">
-        <mat-label>Date of Birth</mat-label>
-        <input
-          matInput
-          [matDatepicker]="picker"
-          formControlName="dateOfBirth"
-        />
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-label>Date of Hire</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfHire" />
+        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
         <mat-datepicker-toggle
           matIconSuffix
           [for]="picker"
         ></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
-
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>Date of Hire</mat-label>
-        <input matInput type="date" formControlName="dateOfHire" />
-      </mat-form-field> -->
-
-      <!-- <mat-form-field appearance="outline">
-        <mat-label>Date of Hire</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="dateOfHire" />
-        <mat-hint>MM/DD/YYYY</mat-hint>
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field> -->
 
       <mat-form-field appearance="outline">
         <mat-label>Job Title</mat-label>
@@ -53,15 +33,21 @@
         <mat-label>Payment rate per hour</mat-label>
         <input matInput formControlName="paymentRatePerHour" />
       </mat-form-field>
-
       <mat-form-field appearance="outline">
-        <mat-label>Contact Information</mat-label>
-        <input matInput formControlName="contactInformation" />
+        <mat-label>Contractor</mat-label>
+        <mat-select formControlName="contractorId">
+          <mat-option
+            *ngFor="let contractor of contructorList"
+            [value]="contractor._id"
+          >
+            {{ contractor.companyName }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Assigned Collection Route</mat-label>
-        <input matInput formControlName="assignedCollectionRoute" />
+        <mat-label>Required Work Time Hour</mat-label>
+        <input matInput formControlName="requiredWorkTimeHour" />
       </mat-form-field>
     </div>
 

@@ -8,7 +8,7 @@ const WorkforceSchema = new mongoose.Schema({
   },
   dateOfBirth: {
     type: Date,
-    required: true
+    required: false
   },
   dateOfHire: {
     type: Date,
@@ -30,7 +30,7 @@ const WorkforceSchema = new mongoose.Schema({
   },
   contactNumber: {
     type: String,
-    required: true
+    required: false
   },
   contractorId:
   {

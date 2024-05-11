@@ -7,11 +7,11 @@ const ThirdPartyContractorSchema = new mongoose.Schema({
   }, 
   registrationId: {
     type: String,
-    required: true
+    required: false
   },
   registrationDate: {
     type: Date,
-    required: true
+    required: false
   },
   tin: {
     type: String,

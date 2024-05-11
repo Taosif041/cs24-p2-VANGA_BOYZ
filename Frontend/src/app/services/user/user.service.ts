@@ -44,4 +44,12 @@ export class UserService {
     const url = `${this.apiUrl}/user/${id}`; // Use apiUrl for base URL
     return this.http.put(url, data, { headers: this.getHeaders() });
   }
+  loadUserData(): any {
+    const userDataString = sessionStorage.getItem('userInfo');
+    if (userDataString) {
+      return JSON.parse(userDataString);
+    } else {
+      return null;
+    }
+  }
 }

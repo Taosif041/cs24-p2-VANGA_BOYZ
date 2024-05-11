@@ -11,9 +11,11 @@ import { MatListModule } from '@angular/material/list';
 
 import { MatMenuModule } from '@angular/material/menu';
 import { SnackbarService } from '../../../services/snackbar/snackbar.service';
-import { RegisterContructorDialogComponent } from '../register-contructor-dialog/register-contructor-dialog.component';
 import { ContructorService } from '../../../services/contructor/contructor.service';
 import { RouterOutlet, Router } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { StsService } from '../../../services/sts/sts.service';
 
 @Component({
   selector: 'app-register-contructor',
@@ -30,21 +32,21 @@ import { RouterOutlet, Router } from '@angular/router';
     MatListModule,
     MatMenuModule,
     RouterOutlet,
+    MatDatepickerModule,
   ],
   templateUrl: './register-contructor.component.html',
   styleUrl: './register-contructor.component.scss',
+  providers: [provideNativeDateAdapter()],
 })
 export class RegisterContructorComponent implements OnInit {
   displayedColumns: string[] = [
     'companyName',
-    'registrationId',
-    'tin',
     'contactNumber',
     'workforceSize',
-    'paymentPerTonnage',
-    'requiredAmountPerDay',
+    'paymentPerTonnageOfWaste',
+    'requiredAmountOfWastePerDay',
     'contractDuration',
-    'designatedSTS',
+    // 'designatedSTS',
     'action',
   ];
   dataSource!: MatTableDataSource<any>;
@@ -56,30 +58,20 @@ export class RegisterContructorComponent implements OnInit {
     private _dialogue: MatDialog,
     private _Contructorervice: ContructorService,
     private _snackbar: SnackbarService,
-    public dialog: MatDialog,
+    private _stsService: StsService,
     private router: Router
   ) {}
   ngOnInit(): void {
     this.getContructorList();
   }
 
-  openDilogForm() {
-    const DialogRef = this._dialogue.open(RegisterContructorDialogComponent);
-    DialogRef.afterClosed().subscribe({
-      next: (val) => {
-        if (val) {
-          this.getContructorList();
-        }
-      },
-      error: console.log,
-    });
-  }
   getContructorList() {
     this._Contructorervice.getContructorList().subscribe({
       next: (res) => {
         this.dataSource = new MatTableDataSource(res);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        console.log('contructor list', res);
       },
       error: (err) => {
         console.log(err);
@@ -104,20 +96,21 @@ export class RegisterContructorComponent implements OnInit {
       error: console.log,
     });
   }
-  openEditForm(data: any) {
-    const DialogRef = this._dialogue.open(RegisterContructorDialogComponent, {
-      data,
-    });
-    DialogRef.afterClosed().subscribe({
-      next: (val) => {
-        if (val) {
-          this.getContructorList();
-        }
-      },
-      error: console.log,
-    });
-  }
+
   navigateToRegisterConstructorForm() {
     this.router.navigate(['/register-contructor-form']);
+  }
+
+  getStsById(id: string) {
+    this._stsService.getStsById(id).subscribe({
+      next: (sts: any) => {
+        console.log('STS:', sts);
+        return sts.name;
+        // Do something with the fetched STS data
+      },
+      error: (error) => {
+        console.error('Error fetching STS by ID:', error);
+      },
+    });
   }
 }
