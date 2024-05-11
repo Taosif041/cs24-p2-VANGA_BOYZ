@@ -75,7 +75,9 @@ householdUserControllers.login = async (req, res) => {
       { expiresIn: '5 days' },
       (err, token) => {
         if (err) throw err;
-        res.status(200).json({ token });
+        user = user.toObject();
+        delete user.password;
+        res.status(200).json({ token, user });
 
       }
     );
